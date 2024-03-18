@@ -1,9 +1,9 @@
 package com.mygitgor.tacocloud.domain;
 
 public enum Type {
-    INGREDIENT_TYPE_WRAP,
-    INGREDIENT_TYPE_PROTEIN,
-    INGREDIENT_TYPE_VEGGIES,
-    INGREDIENT_TYPE_CHEESE,
-    INGREDIENT_TYPE_SAUCE
+    WRAP,
+    PROTEIN,
+    VEGGIES,
+    CHEESE,
+    SAUCE
 }
