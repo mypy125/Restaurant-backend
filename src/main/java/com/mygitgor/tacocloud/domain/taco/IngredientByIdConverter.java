@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain;
+package com.mygitgor.tacocloud.domain.taco;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,9 @@
 package com.mygitgor.tacocloud.web.controller;
 
-import com.mygitgor.tacocloud.domain.Ingredient;
-import com.mygitgor.tacocloud.domain.Taco;
-import com.mygitgor.tacocloud.domain.TacoOrder;
-import com.mygitgor.tacocloud.domain.Type;
+import com.mygitgor.tacocloud.domain.taco.Ingredient;
+import com.mygitgor.tacocloud.domain.taco.Taco;
+import com.mygitgor.tacocloud.domain.taco.TacoOrder;
+import com.mygitgor.tacocloud.domain.taco.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.mygitgor.tacocloud.domain.Type.*;
 
 @Slf4j
 @Controller

@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain;
+package com.mygitgor.tacocloud.domain.taco;
 
 public enum Type {
     WRAP,
