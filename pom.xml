@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.3</version>
+		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mygitgor</groupId>
@@ -16,10 +16,13 @@
 	<properties>
 		<java.version>17</java.version>
 		<spring-doc.version>2.4.0</spring-doc.version>
-		<spring-sequrity.version>6.2.2</spring-sequrity.version>
+		<spring-sequrity.version>6.2.3</spring-sequrity.version>
 		<spring-jpa.version>3.2.3</spring-jpa.version>
 		<jakarta-validation-api.version>3.0.2</jakarta-validation-api.version>
 		<h2database.version>2.2.224</h2database.version>
+		<postgresql-driver.version>42.7.3</postgresql-driver.version>
+		<hibernate-cor.version>6.4.4.Final</hibernate-cor.version>
+		<spring-boot-config-processor.version>3.2.4</spring-boot-config-processor.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -62,6 +65,18 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jdbc</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<version>${spring-boot-config-processor.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring-sequrity.version}</version>
@@ -73,10 +88,22 @@
         </dependency>
 
 		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-cor.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2database.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql-driver.version}</version>
 		</dependency>
 
 		<dependency>
