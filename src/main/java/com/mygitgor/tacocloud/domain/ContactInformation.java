@@ -1,5 +1,13 @@
-package com.mygitgor.tacocloud.domain.entityes;
+package com.mygitgor.tacocloud.domain;
 
+import lombok.Data;
+
+@Data
 public class ContactInformation {
+    private String email;
+    private String mobile;
+    private String twitter;
+    private String instagram;
+
 }
 

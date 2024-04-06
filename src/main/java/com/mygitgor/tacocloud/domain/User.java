@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain.entityes;
+package com.mygitgor.tacocloud.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mygitgor.tacocloud.dto.RestaurantDto;
@@ -14,9 +14,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String fullName;

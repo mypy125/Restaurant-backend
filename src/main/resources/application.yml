@@ -1,23 +1,15 @@
 spring:
-  thymeleaf:
-    cache: false
-  h2:
-    console:
-      enabled: true
-  jpa:
-    open-in-view: false
-    properties:
-      hibernate:
-        show_sql: true
-        use_sql_comments: true
-        format_sql: true
-        type: trace
-        ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://172.19.0.1:3306/taco
+    url: jdbc:postgresql://172.18.0.1:5432/postgres
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  data:
-    rest:
-      base-path: /api
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show-sql: true
+
+server:
+  port: 8180

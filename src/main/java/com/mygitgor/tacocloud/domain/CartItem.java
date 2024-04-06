@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain.entityes;
+package com.mygitgor.tacocloud.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

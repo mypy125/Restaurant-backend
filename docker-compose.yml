@@ -1,21 +1,21 @@
 version: "3.8"
 services:
   db:
-    container_name: mysql_container
-    image: mysql
+    container_name: postgres_container
+    image: postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: taco
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: taskList
     ports:
-      - "3307:3306"
-  phpmyadmin:
-    container_name: phpmyadmin_container
-    image: phpmyadmin/phpmyadmin
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
     restart: always
     environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: root
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
     ports:
-      - "8080:80"
+      - "5050:80"
