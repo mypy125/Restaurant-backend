@@ -1,5 +1,6 @@
-package com.mygitgor.tacocloud.domain.user;
+package com.mygitgor.tacocloud.domain.entityes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,21 +10,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Restaurant {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    private User owner;
-
     private String name;
-    private String description;
-    private String cuisineType;
 
+    @JsonIgnore
     @ManyToOne
-    private Address address;
-
-    @Embedded
-    private ContactInformation contactInformation;
+    private Restaurant restaurant;
 }

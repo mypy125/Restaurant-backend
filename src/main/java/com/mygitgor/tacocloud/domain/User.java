@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain.user;
+package com.mygitgor.tacocloud.domain.entityes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mygitgor.tacocloud.dto.RestaurantDto;

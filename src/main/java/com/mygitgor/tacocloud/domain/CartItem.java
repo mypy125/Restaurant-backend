@@ -1,5 +1,6 @@
-package com.mygitgor.tacocloud.domain.user;
+package com.mygitgor.tacocloud.domain.entityes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,18 +10,23 @@ import java.util.List;
 
 @Data
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-public class OrderItem {
+@AllArgsConstructor
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @JsonIgnore
+    @ManyToOne
+    private Cart cart;
 
     @ManyToOne
     private Food food;
 
     private int quantity;
-    private Long totalPrice;
 
     private List<String> ingredients;
+
+    private Long totalPrice;
 }

@@ -1,4 +1,4 @@
-package com.mygitgor.tacocloud.domain.user;
+package com.mygitgor.tacocloud.domain.entityes;
 
 public enum Role {
     CUSTOMER,
