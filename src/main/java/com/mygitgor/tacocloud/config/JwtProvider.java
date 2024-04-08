@@ -2,6 +2,7 @@ package com.mygitgor.tacocloud.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,8 @@ import java.util.Set;
 
 @Service
 public class JwtProvider {
-    private SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+//    JwtConstant.SECRET_KEY.getBytes()
+    private SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String generateToken(Authentication aut){
         Collection<? extends GrantedAuthority> authorities = aut.getAuthorities();
