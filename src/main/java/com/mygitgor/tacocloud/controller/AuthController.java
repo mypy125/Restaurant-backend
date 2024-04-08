@@ -10,8 +10,6 @@ import com.mygitgor.tacocloud.request.LoginRequest;
 import com.mygitgor.tacocloud.response.AuthResponse;
 import com.mygitgor.tacocloud.service.CustomerUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,24 +28,20 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private JwtProvider jwtProvider;
-    @Autowired
-    private CustomerUserDetailsService customerUserDetailsService;
+    private final UserRepository userRepository;
+    private final CartRepository cartRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final CustomerUserDetailsService customerUserDetailsService;
 
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
         User isEmailExist = userRepository.findByEmail(user.getEmail());
         if(isEmailExist != null){
-            throw new Exception("Email is already used with another account");
+            throw new Exception("Email is already used with another account..");
         }
         User createUser = new User();
         createUser.setEmail(user.getEmail());
