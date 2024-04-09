@@ -10,20 +10,14 @@ import java.util.List;
 
 public interface RestaurantService {
     Restaurant createRestaurant(CreateRestaurantRequest request, User user);
-    @SneakyThrows
-    Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updateRestaurant);
-    @SneakyThrows
-    void deleteRestaurant(Long restaurantId);
+    Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updateRestaurant)throws Exception;
+    void deleteRestaurant(Long restaurantId)throws Exception;
     List<Restaurant> getAllRestaurant();
-    List<Restaurant> searchRestaurant();
-    @SneakyThrows
-    Restaurant findRestaurantById(Long id);
-    @SneakyThrows
-    Restaurant findRestaurantByUserId(Long id);
-    @SneakyThrows
-    RestaurantDto addToFavorites(Long restaurantId, User user);
-    @SneakyThrows
-    Restaurant updateRestaurantStatus(Long id);
+    List<Restaurant> searchRestaurant(String keyword);
+    Restaurant findRestaurantById(Long id)throws Exception;
+    Restaurant findRestaurantByUserId(Long id)throws Exception;
+    RestaurantDto addToFavorites(Long restaurantId, User user)throws Exception;
+    Restaurant updateRestaurantStatus(Long id)throws Exception;
 
 
 }
