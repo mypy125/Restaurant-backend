@@ -1,10 +1,9 @@
 package com.mygitgor.tacocloud.repository;
 
-import com.mygitgor.tacocloud.domain.User;
+import com.mygitgor.tacocloud.domain.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String username);
+public interface AddressRepository extends JpaRepository<Address, Long> {
 }
