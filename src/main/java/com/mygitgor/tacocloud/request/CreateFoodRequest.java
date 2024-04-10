@@ -1,8 +1,6 @@
 package com.mygitgor.tacocloud.request;
 
-import com.mygitgor.tacocloud.domain.Category;
-import com.mygitgor.tacocloud.domain.IngredientItem;
-import com.mygitgor.tacocloud.domain.Restaurant;
+import com.mygitgor.tacocloud.domain.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.ManyToMany;
@@ -15,16 +13,18 @@ import java.util.List;
 
 @Data
 public class CreateFoodRequest {
+    private Long id;
     private String name;
     private String description;
     private Long price;
-    private Category foodCategory;
+    private Category category;
+
     private List<String> images;
+    private Long restaurantId;
 
-    private Restaurant restaurantId;
-    private boolean isVegetarian;
-    private boolean isSeasonal;
+    private boolean vegetarian;
+    private boolean seasonal;
 
-    private List<IngredientItem> ingredients = new ArrayList<>();
+    private List<IngredientItem> ingredients;
 
 }
