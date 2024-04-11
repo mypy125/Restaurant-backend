@@ -33,6 +33,7 @@ public class FoodController {
 
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
+
     @SneakyThrows
     @DeleteMapping("/restaurant/{restaurantId}")
     public ResponseEntity<List<Food>> getRestaurantFood(@RequestParam boolean vegetarian,
