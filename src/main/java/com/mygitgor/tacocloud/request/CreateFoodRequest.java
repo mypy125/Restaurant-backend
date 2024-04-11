@@ -1,14 +1,8 @@
 package com.mygitgor.tacocloud.request;
 
 import com.mygitgor.tacocloud.domain.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data

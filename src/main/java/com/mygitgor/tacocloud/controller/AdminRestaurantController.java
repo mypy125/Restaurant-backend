@@ -43,7 +43,6 @@ public class AdminRestaurantController {
     @SneakyThrows
     public ResponseEntity<MessageResponse> deleteRestaurant(@RequestHeader("Authorization") String jwt,
                                                             @PathVariable Long id){
-
         User user = userService.findUserByJwtToken(jwt);
 
         MessageResponse response = new MessageResponse();
