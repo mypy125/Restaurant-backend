@@ -20,6 +20,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final UserService userService;
 
+    @SneakyThrows
     @GetMapping("/search")
     public ResponseEntity<List<Restaurant>> searchRestaurant(@RequestHeader("Authorization") String jwt,
                                                              @RequestParam String keyword){
@@ -28,6 +29,7 @@ public class RestaurantController {
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
+    @SneakyThrows
     @GetMapping()
     public ResponseEntity<List<Restaurant>> getAllRestaurant(@RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);

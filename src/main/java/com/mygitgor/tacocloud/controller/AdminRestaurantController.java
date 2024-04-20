@@ -19,6 +19,7 @@ public class AdminRestaurantController {
     private final RestaurantService restaurantService;
     private final UserService userService;
 
+    @SneakyThrows
     @PostMapping()
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantRequest request,
                                                        @RequestHeader("Authorization") String jwt){
