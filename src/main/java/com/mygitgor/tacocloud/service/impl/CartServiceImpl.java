@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Cart Service: Этот сервиз связаны с  корзиной покупок.
+ */
 @Service
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
@@ -23,6 +26,13 @@ public class CartServiceImpl implements CartService {
     private final FoodService foodService;
     private final UserService userService;
 
+    /**
+     * метод предназначен для добавления товара в корзину пользователя.
+     * @param request пренимает foodId quantity ingredients
+     * @param jwt  пренимает токен пользователя
+     * @return возврошяет корзину товаров пользователя
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public CartItem addItemToCart(AddCartItemRequest request, String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
@@ -48,6 +58,13 @@ public class CartServiceImpl implements CartService {
         return saveCartItem;
     }
 
+    /**
+     * метод предназначен для обновления количества товара в корзине пользователя
+     * @param cartItemId принемает идентификатор карзины
+     * @param quantity принемает количество товаров
+     * @return возврошает корзину товаров
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws Exception {
         Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
@@ -62,6 +79,13 @@ public class CartServiceImpl implements CartService {
         return cartItemRepository.save(cartItem);
     }
 
+    /**
+     * метод предназначен для удаления элемента из корзины пользователя.
+     * @param id идентификатор карзины
+     * @param jwt токен пользователя
+     * @return  возврашает карзину
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Cart removeItemFromCart(Long id, String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
@@ -78,6 +102,12 @@ public class CartServiceImpl implements CartService {
         return cartRepository.save(cart);
     }
 
+    /**
+     * метод предназначен для расчета общей стоимости товаров в корзине.
+     * @param cart принимает карзину
+     * @return возврошает стоимость товаров
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Long calculateCartTotals(Cart cart) throws Exception {
         Long total = 0L;
@@ -88,6 +118,12 @@ public class CartServiceImpl implements CartService {
         return total;
     }
 
+    /**
+     * метод предназначен для поиска корзины по её идентификатору.
+     * @param id идентификатор карзины
+     * @return возврошает карзину
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Cart findCartById(Long id) throws Exception {
         Optional<Cart> cartOptional = cartRepository.findById(id);
@@ -98,6 +134,12 @@ public class CartServiceImpl implements CartService {
         return cartOptional.get();
     }
 
+    /**
+     * метод предназначен для поиска корзины по идентификатору пользователя.
+     * @param userId идентификатор пользователя
+     * @return возврошает карзину пользователя
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Cart findCartByUserId(Long userId) throws Exception {
         Cart cart = cartRepository.findByCustomerId(userId);
@@ -105,6 +147,12 @@ public class CartServiceImpl implements CartService {
         return cart;
     }
 
+    /**
+     * метод clearCart предназначен для очистки корзины пользователя.
+     * @param userId идентификатор пользователя
+     * @return возбрашает карзину
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Cart clearCart(Long userId) throws Exception {
         Cart cart = findCartByUserId(userId);
