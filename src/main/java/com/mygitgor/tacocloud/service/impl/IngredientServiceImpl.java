@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * IngredientService: этот сервиз относятся к ингредиентам.
+ */
 @Service
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
