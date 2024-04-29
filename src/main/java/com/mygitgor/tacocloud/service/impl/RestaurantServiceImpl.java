@@ -16,12 +16,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * RestaurantService: Этот сервиз связаны с ресторанами
+ */
 @Service
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
+
+
+    /**
+     * метод используется для создания нового ресторана на основе полученного запроса и информации о пользователе.
+     * @param request ресторанный запрос
+     * @param user пользожатель (админ)
+     * @return возврошает созданный ресторан
+     */
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest request, User user) {
        Address address = addressRepository.save(request.getAddress());
@@ -39,6 +50,14 @@ public class RestaurantServiceImpl implements RestaurantService {
        return restaurantRepository.save(restaurant);
     }
 
+    /**
+     * метод позволяет администраторам или владельцам ресторанов обновлять информацию о своих заведениях,
+     * такую как название, описание и тип кухни.
+     * @param restaurantId идентификатор ресторана
+     * @param updateRestaurant новый параметры запроса для обновления
+     * @return возврошает ресторан обновленным данными
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updateRestaurant)throws Exception {
         Restaurant restaurant = findRestaurantById(restaurantId);
@@ -54,22 +73,45 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
+    /**
+     *  метод используется для удаления ресторана из системы.
+     * @param restaurantId идентификатор ресторана
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public void deleteRestaurant(Long restaurantId)throws Exception {
         Restaurant restaurant = findRestaurantByUserId(restaurantId);
         restaurantRepository.delete(restaurant);
     }
 
+    /**
+     *  метод getAllRestaurant используется для получения списка всех ресторанов, которые хранятся в системе.
+     *  Он просто извлекает все рестораны из репозитория и возвращает их в виде списка.
+     * @return список ресторан
+     */
     @Override
     public List<Restaurant> getAllRestaurant() {
         return restaurantRepository.findAll();
     }
 
+    /**
+     *  метод searchRestaurant используется для поиска ресторанов по ключевому слову.
+     *  Он выполняет поиск в репозитории ресторанов по заданному ключевому слову и возвращает список найденных ресторанов.
+     * @param keyword клзчевое слово
+     * @return список ресторан
+     */
     @Override
     public List<Restaurant> searchRestaurant(String keyword) {
         return restaurantRepository.findBySearchQuery(keyword);
     }
 
+    /**
+     * метод используется для поиска ресторана по его идентификатору.
+     * Он выполняет запрос к репозиторию ресторанов и возвращает ресторан с указанным идентификатором,
+     * @param id идентификатор ресторана
+     * @return возврошает ресторан
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Restaurant findRestaurantById(Long id)throws Exception {
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
@@ -79,6 +121,14 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurant.get();
     }
 
+    /**
+     *  метод выполняет поиск ресторана по идентификатору его владельца (пользователя).
+     *  Он использует restaurantRepository для выполнения запроса к базе данных и возвращает ресторан,
+     *  у которого владелец имеет указанный идентификатор.
+     * @param id идентификатор владелеца
+     * @return возврошает ресторан
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Restaurant findRestaurantByUserId(Long id)throws Exception {
         Restaurant restaurant = restaurantRepository.findByOwnerId(id);
@@ -88,6 +138,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurant;
     }
 
+    /**
+     * метод addToFavorites предназначен для добавления ресторана в список избранных для определенного пользователя.
+     * Он принимает идентификатор ресторана и пользователя. Затем он находит ресторан по его идентификатору с помощью метода findRestaurantById.
+     * После этого создается объект RestaurantDto, в который копируются необходимые данные о ресторане. Затем метод проверяет,
+     * содержится ли ресторан уже в списке избранных пользователя. Если ресторан уже присутствует в списке избранных, он удаляется из списка, иначе он добавляется.
+     * После этого обновляется информация о пользователе в базе данных с помощью userRepository.save(user).
+     * Наконец, метод возвращает объект RestaurantDto
+     * @param restaurantId идентификатор  ресторана
+     * @param user пользователь
+     * @return возврошает ресторандто
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public RestaurantDto addToFavorites(Long restaurantId, User user)throws Exception {
         Restaurant restaurant = findRestaurantById(restaurantId);
@@ -108,6 +170,16 @@ public class RestaurantServiceImpl implements RestaurantService {
         return restaurantDto;
     }
 
+    /**
+     * метод предназначен для изменения статуса (открыт/закрыт) ресторана.
+     * Он принимает идентификатор ресторана, находит соответствующий ресторан по этому идентификатору с помощью
+     * метода findRestaurantById, изменяет его статус на противоположный (открытый ресторан становится закрытым и наоборот),
+     * а затем сохраняет обновленную информацию о ресторане в базе данных с помощью restaurantRepository.save(restaurant).
+     * Наконец, метод возвращает обновленный объект Restaurant.
+     * @param id идентификатор ресторана
+     * @return возвращает обновленный ресторан
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Restaurant updateRestaurantStatus(Long id)throws Exception {
         Restaurant restaurant = findRestaurantById(id);
