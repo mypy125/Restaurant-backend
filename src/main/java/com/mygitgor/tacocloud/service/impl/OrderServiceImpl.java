@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Order Service: Этот сервиз связаны с оформлением заказов.
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -28,6 +31,14 @@ public class OrderServiceImpl implements OrderService {
     private final RestaurantService restaurantService;
     private final CartService cartService;
 
+
+    /**
+     * метод обеспечивает создание нового заказа на основе информации, полученной из запроса, и данных пользователя.
+     * @param request ордерский запрос
+     * @param user пользожатель для оформления заказа
+     * @return возжрашает заказ
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Order createOrder(OrderRequest request, User user) throws Exception {
         Address shopAddress = request.getDeliveryAddress();
@@ -75,6 +86,13 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * метод обеспечивает возможность обновления статуса заказа на основе его идентификатора и переданного статуса.
+     * @param orderId идентификатор заказа
+     * @param orderStatus статус
+     * @return возврошает заказ
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Order updateOrder(Long orderId, String orderStatus) throws Exception {
         Order order = findOrderById(orderId);
@@ -87,17 +105,35 @@ public class OrderServiceImpl implements OrderService {
         throw new Exception("select a valid order status");
     }
 
+    /**
+     * метод не возвращает результат, так как просто отменяет заказ, удаляя его из базы данных.
+     * @param orderId идентификатор заказа
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public void calcelOrder(Long orderId) throws Exception {
         Order order = findOrderById(orderId);
         orderRepository.deleteById(orderId);
     }
 
+    /**
+     *  метод предназначен для получения списка заказов пользователя по его идентификатору.
+     * @param userId идентификатор пользователя
+     * @return возврошает список заказов
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public List<Order> getUsersOrder(Long userId) throws Exception {
         return orderRepository.findByCustomerId(userId);
     }
 
+    /**
+     * метод предназначен для получения списка заказов ресторана по его идентификатору и статусу заказа.
+     * @param restaurantId идентификатор ресторана
+     * @param orderStatus статус заказа
+     * @return возврошает список зказов
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public List<Order> getRestaurantsOrder(Long restaurantId, String orderStatus) throws Exception {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
@@ -108,6 +144,13 @@ public class OrderServiceImpl implements OrderService {
         return orders;
     }
 
+    /**
+     * метод полезен при поиске заказа по его идентификатору для выполнения различных операций,
+     * таких как обновление статуса заказа или получение информации о конкретном заказе.
+     * @param orderId идентификатор заказа
+     * @return возврошает заказ
+     * @throws Exception бросает исключения Exception
+     */
     @Override
     public Order findOrderById(Long orderId) throws Exception {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
