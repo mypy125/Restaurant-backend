@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Этот контроллер делегирует бизнес-логику который управляет созданием, обновлением и удалением элементов питания.
+ */
 @RestController
 @RequestMapping("/api/admin/food")
 @RequiredArgsConstructor
