@@ -19,6 +19,10 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Класс JwtTokenValidator является фильтром Spring Security,
+ * который используется для проверки и валидации JWT-токенов, полученных от клиентов.
+ */
 public class JwtTokenValidator extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
