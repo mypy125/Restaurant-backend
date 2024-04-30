@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * UserController управляет операциями, связанными с пользователями.
+ */
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor

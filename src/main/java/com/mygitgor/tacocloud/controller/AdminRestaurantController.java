@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * AdminRestaurantController определяется конечные точки для управления ресторанами в панели администратора.
+ */
 @RestController
 @RequestMapping("/api/admin/restaurants")
 @RequiredArgsConstructor

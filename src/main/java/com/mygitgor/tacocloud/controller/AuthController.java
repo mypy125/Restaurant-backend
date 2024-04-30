@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
+/**
+ * AuthController определяется конечные точки, связанные с аутентификацией и авторизацией пользователей.
+ */
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -37,6 +40,15 @@ public class AuthController {
     private final CustomerUserDetailsService customerUserDetailsService;
 
 
+    /**
+     * Этот метод является обработчиком создания новой учетной записи пользователя.
+     * Получает объект User из тела запроса.
+     * Создает новый объект User на основе полученных данных.
+     * Хэширует пароль пользователя с использованием passwordEncoder.
+     * @param user объект из тела запроса
+     * @return возврошает JWT токен, сообщение об успешной регистрации и роль пользователя.
+     * @throws Exception бросает исключения Exception
+     */
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
         User isEmailExist = userRepository.findByEmail(user.getEmail());
@@ -67,6 +79,11 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * Этот метод отвечает за аутентификацию пользователя и генерацию JWT токена при успешной аутентификации.
+     * @param request данные аутентификации (логин и пароль)
+     * @return возврошает JWT токен, сообщение об успешной аутентификации и роль пользователя.
+     */
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest request){
         String username = request.getEmail();

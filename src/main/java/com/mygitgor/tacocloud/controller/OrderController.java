@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * OrderController управляет операциями, связанными с заказами.
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

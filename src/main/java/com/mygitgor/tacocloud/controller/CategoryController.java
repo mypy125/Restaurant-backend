@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * CategoryController управляет операциями, связанными с категориями ресторанов.
+ */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor

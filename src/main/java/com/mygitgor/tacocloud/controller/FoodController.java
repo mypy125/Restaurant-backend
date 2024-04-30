@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * FoodController обрабатывает операции, связанные с ресторанными блюдами.
+ */
 @RestController
 @RequestMapping("/api/food")
 @RequiredArgsConstructor

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * IngredientsController управляет операциями, связанными с ингредиентами для ресторанов.
+ */
 @RestController
 @RequestMapping("/api/admin/ingredients")
 @RequiredArgsConstructor

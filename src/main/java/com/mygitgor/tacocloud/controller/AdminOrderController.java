@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * AdminOrderController определяется конечные точки для управления заказами в панели администратора.
+ */
 @RestController
 @RequestMapping("api/admin")
 @RequiredArgsConstructor
