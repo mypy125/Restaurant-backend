@@ -71,4 +71,15 @@ public class CartControllerTest {
         assertEquals(cart, response.getBody());
     }
 
+    @Test
+    public void testFindUserCart() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        Cart cart = new Cart();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
+        when(cartService.findCartByUserId(eq(1L))).thenReturn(cart);
+        ResponseEntity<Cart> response = cartController.findUserCart("dummy_jwt_token");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(cart, response.getBody());
+    }
 }
