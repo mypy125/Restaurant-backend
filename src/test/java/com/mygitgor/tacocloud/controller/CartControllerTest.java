@@ -1,6 +1,8 @@
 package com.mygitgor.tacocloud.controller;
 
+import com.mygitgor.tacocloud.domain.Cart;
 import com.mygitgor.tacocloud.domain.CartItem;
+import com.mygitgor.tacocloud.domain.User;
 import com.mygitgor.tacocloud.request.AddCartItemRequest;
 import com.mygitgor.tacocloud.request.UpdateCartItemRequest;
 import com.mygitgor.tacocloud.service.CartService;
@@ -46,6 +48,27 @@ public class CartControllerTest {
         ResponseEntity<CartItem> response = cartController.updateCartItemQuantity(request, "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cartItem, response.getBody());
+    }
+
+    @Test
+    public void testRemoveCartItem() throws Exception{
+        Cart cart = new Cart();
+        when(cartService.removeItemFromCart(eq(1L), anyString())).thenReturn(cart);
+        ResponseEntity<Cart> response = cartController.removeCartItem(1L, "dummy_jwt_token");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(cart, response.getBody());
+    }
+
+    @Test
+    public void testClearCart() throws Exception{
+        User user = new User();
+        user.setId(1L);
+        Cart cart = new Cart();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
+        when(cartService.clearCart(eq(1L))).thenReturn(cart);
+        ResponseEntity<Cart> response = cartController.clearCart("dummy_jwt_token");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(cart, response.getBody());
     }
 
 }
