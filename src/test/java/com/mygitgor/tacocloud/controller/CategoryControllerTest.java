@@ -52,5 +52,23 @@ public class CategoryControllerTest {
         assertEquals(createdCategory, response.getBody());
     }
 
+    @Test
+    public void testGetRestaurantCategory() throws Exception{
+        User user = new User();
+        user.setId(1L);
 
+        Category category1 = new Category();
+        category1.setName("Sushi");
+        Category category2 = new Category();
+        category2.setName("Pizza");
+
+        List<Category> categories = Arrays.asList(category1, category2);
+        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
+        when(categoryService.findCategoryByRestaurantId(eq(1L))).thenReturn(categories);
+
+        ResponseEntity<List<Category>> response = categoryController.getRestaurantCategory("dummy_jwt_token");
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(categories, response.getBody());
+    }
 }
