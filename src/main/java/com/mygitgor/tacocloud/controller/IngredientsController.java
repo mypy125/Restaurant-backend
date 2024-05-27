@@ -34,13 +34,13 @@ public class IngredientsController {
     }
 
     @GetMapping("/restaurant/{id}")
-    public ResponseEntity<List<IngredientItem>> GetRestaurantIngredient(@PathVariable Long id) throws Exception {
+    public ResponseEntity<List<IngredientItem>> getRestaurantIngredient(@PathVariable Long id) throws Exception {
         List<IngredientItem> items = ingredientService.findRestaurantIngredients(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/restaurant/{id}/category")
-    public ResponseEntity<List<IngredientCategory>> GetRestaurantIngredientCategory(@PathVariable Long id) throws Exception {
+    public ResponseEntity<List<IngredientCategory>> getRestaurantIngredientCategory(@PathVariable Long id) throws Exception {
         List<IngredientCategory> items = ingredientService.findIngredientCategoryByRestaurantId(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
