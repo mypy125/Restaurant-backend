@@ -2,6 +2,7 @@ package com.mygitgor.tacocloud.controller;
 
 import com.mygitgor.tacocloud.domain.Restaurant;
 import com.mygitgor.tacocloud.domain.User;
+import com.mygitgor.tacocloud.dto.RestaurantDto;
 import com.mygitgor.tacocloud.service.RestaurantService;
 import com.mygitgor.tacocloud.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -74,5 +76,47 @@ public class RestaurantControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(restaurants, response.getBody());
+    }
+
+    @Test
+    public void testFindRestaurantById()throws Exception{
+        String jwt = "dummy_jwt_token";
+        Long restaurantId = 1L;
+
+        User user = new User();
+        user.setId(1L);
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(restaurantId);
+        restaurant.setName("Sushi World");
+
+        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
+        when(restaurantService.findRestaurantById(restaurantId)).thenReturn(restaurant);
+
+        ResponseEntity<Restaurant>response = restaurantController.findRestaurantById(jwt, restaurantId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurant, response.getBody());
+    }
+
+    @Test
+    public void testAddRestaurantFavorites()throws Exception{
+        String jwt = "dummy_jwt_token";
+        Long restaurantId = 1L;
+
+        User user = new User();
+        user.setId(1L);
+
+        RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setId(restaurantId);
+        restaurantDto.setName("Sushi Place");
+
+        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
+        when(restaurantService.addToFavorites(eq(restaurantId), eq(user))).thenReturn(restaurantDto);
+
+        ResponseEntity<RestaurantDto> response = restaurantController.addRestaurantFavorites(jwt, restaurantId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(restaurantDto, response.getBody());
     }
 }
