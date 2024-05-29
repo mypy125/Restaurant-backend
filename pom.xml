@@ -20,6 +20,7 @@
 		<jjwt-tocken.verdion>0.11.5</jjwt-tocken.verdion>
 		<JUnit-test.version>4.13.2</JUnit-test.version>
 		<mockhito-core.version>5.12.0</mockhito-core.version>
+		<com-stripe.version>25.9.0</com-stripe.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -96,6 +97,11 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>${com-stripe.version}</version>
 		</dependency>
 	</dependencies>
 
