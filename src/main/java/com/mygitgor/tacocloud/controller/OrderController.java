@@ -5,7 +5,9 @@ import com.mygitgor.tacocloud.domain.Order;
 import com.mygitgor.tacocloud.domain.User;
 import com.mygitgor.tacocloud.request.AddCartItemRequest;
 import com.mygitgor.tacocloud.request.OrderRequest;
+import com.mygitgor.tacocloud.response.PaymentResponse;
 import com.mygitgor.tacocloud.service.OrderService;
+import com.mygitgor.tacocloud.service.PaymentService;
 import com.mygitgor.tacocloud.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -24,14 +26,16 @@ import java.util.List;
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
+    private final PaymentService paymentService;
 
     @SneakyThrows
     @PostMapping("/order")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request,
-                                                  @RequestHeader("Authorization") String jwt){
+    public ResponseEntity<PaymentResponse> createOrder(@RequestBody OrderRequest request,
+                                                       @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
         Order order = orderService.createOrder(request, user);
-        return new ResponseEntity<>(order, HttpStatus.OK);
+        PaymentResponse response = paymentService.createPaymentLink(order);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @SneakyThrows

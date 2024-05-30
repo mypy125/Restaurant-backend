@@ -3,7 +3,9 @@ package com.mygitgor.tacocloud.controller;
 import com.mygitgor.tacocloud.domain.Order;
 import com.mygitgor.tacocloud.domain.User;
 import com.mygitgor.tacocloud.request.OrderRequest;
+import com.mygitgor.tacocloud.response.PaymentResponse;
 import com.mygitgor.tacocloud.service.OrderService;
+import com.mygitgor.tacocloud.service.PaymentService;
 import com.mygitgor.tacocloud.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,6 +29,8 @@ public class OrderControllerTest {
     private OrderService orderService;
     @Mock
     private UserService userService;
+    @Mock
+    private PaymentService paymentService;
 
     @InjectMocks
     OrderController orderController;
@@ -35,19 +39,23 @@ public class OrderControllerTest {
     public void testCreateOrder()throws Exception{
         OrderRequest request = new OrderRequest();
         String jwt = "dummy_jwt_token";
+
         User user = new User();
         user.setId(1L);
 
         Order order = new Order();
         order.setId(1L);
 
+        PaymentResponse paymentResponse = new PaymentResponse();
+
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(orderService.createOrder(any(OrderRequest.class), any(User.class))).thenReturn(order);
+        when(paymentService.createPaymentLink(any(Order.class))).thenReturn(paymentResponse);
 
-        ResponseEntity<Order> response = orderController.createOrder(request, jwt);
+        ResponseEntity<PaymentResponse> response = orderController.createOrder(request, jwt);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(order, response.getBody());
+        assertEquals(paymentResponse, response.getBody());
     }
 
     @Test
