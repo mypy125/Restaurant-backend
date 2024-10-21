@@ -20,13 +20,14 @@ import java.util.List;
 /**
  * OrderController управляет операциями, связанными с заказами.
  */
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
-@RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
     private final PaymentService paymentService;
+
 
     @SneakyThrows
     @PostMapping("/order")

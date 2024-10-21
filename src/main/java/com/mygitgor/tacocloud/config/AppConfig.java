@@ -35,14 +35,27 @@ public class AppConfig {
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(Authorize -> Authorize
+//        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(Authorize -> Authorize
+//                        .requestMatchers("/api/admin/**").hasAnyRole("OWNER", "ADMIN")
+//                        .requestMatchers("/api/**").authenticated()
+//                        .anyRequest().permitAll()
+//                        ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+//                .csrf(csrf -> csrf.disable())
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//        return http.build();
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())  // Disable CSRF for development
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/signup").permitAll()  // Allow signup without authentication
                         .requestMatchers("/api/admin/**").hasAnyRole("OWNER", "ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
-                        ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                )
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class);
+
         return http.build();
     }
 
@@ -51,21 +64,30 @@ public class AppConfig {
      * @return возвращает объект CorsConfigurationSource
      */
     private CorsConfigurationSource corsConfigurationSource() {
-        return new CorsConfigurationSource() {
-            @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                CorsConfiguration config = new CorsConfiguration();
-                config.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:8180/login", "localhost:3000"));
-                config.setAllowedMethods(Collections.singletonList("*"));
-                config.setAllowCredentials(true);
-                config.setAllowedHeaders(Collections.singletonList("*"));
-                config.setExposedHeaders(Arrays.asList("Authorization"));
-                config.setMaxAge(3000L);
-                return config;
-            }
+//        return new CorsConfigurationSource() {
+//            @Override
+//            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//                CorsConfiguration config = new CorsConfiguration();
+//                config.setAllowedOrigins(Arrays.asList(
+//                        "http://localhost:8080/login", "localhost:3000"));
+//                config.setAllowedMethods(Collections.singletonList("*"));
+//                config.setAllowCredentials(true);
+//                config.setAllowedHeaders(Collections.singletonList("*"));
+//                config.setExposedHeaders(Arrays.asList("Authorization"));
+//                config.setMaxAge(3000L);
+//                return config;
+//            }
+//
+//        };
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:*"));  // Support all localhost ports
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setExposedHeaders(Collections.singletonList("Authorization"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
 
-        };
+        return request -> config;
     }
 
     /**

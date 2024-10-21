@@ -1,17 +1,26 @@
 spring:
   datasource:
-    url: jdbc:postgresql://172.18.0.1:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
+#    hikari:
+#      maximum-pool-size: 10
+#      connection-timeout: 30000
+#      idle-timeout: 600000
+
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
 
 server:
-  port: 8180
+  port: 8080
 
-strip.api.key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+#stripe:
+#  api:
+#    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+

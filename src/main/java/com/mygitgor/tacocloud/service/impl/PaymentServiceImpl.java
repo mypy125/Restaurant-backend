@@ -6,13 +6,12 @@ import com.mygitgor.tacocloud.service.PaymentService;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
-    @Value("${strip.api.key}")
-    private String stripeSecretKy;
+//    @Value("${strip.api.key}")
+    private String stripeSecretKy="pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G";
 
     @Override
     public PaymentResponse createPaymentLink(Order order) throws Exception {
