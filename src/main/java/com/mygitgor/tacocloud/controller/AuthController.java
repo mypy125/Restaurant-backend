@@ -7,6 +7,7 @@ import com.mygitgor.tacocloud.domain.User;
 import com.mygitgor.tacocloud.repository.CartRepository;
 import com.mygitgor.tacocloud.repository.UserRepository;
 import com.mygitgor.tacocloud.request.LoginRequest;
+import com.mygitgor.tacocloud.request.RegisterRequest;
 import com.mygitgor.tacocloud.response.AuthResponse;
 import com.mygitgor.tacocloud.service.CustomerUserDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -42,29 +43,29 @@ public class AuthController {
      * Получает объект User из тела запроса.
      * Создает новый объект User на основе полученных данных.
      * Хэширует пароль пользователя с использованием passwordEncoder.
-     * @param user объект из тела запроса
+     * @param request объект из тела запроса
      * @return возврошает JWT токен, сообщение об успешной регистрации и роль пользователя.
      * @throws Exception бросает исключения Exception
      */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
-        User isEmailExist = userRepository.findByEmail(user.getEmail());
+    public ResponseEntity<AuthResponse> createUserHandler(@RequestBody RegisterRequest request) throws Exception {
+        User isEmailExist = userRepository.findByEmail(request.getEmail());
         if(isEmailExist != null){
             throw new Exception("Email is already used with another account..");
         }
         User createUser = new User();
-        createUser.setEmail(user.getEmail());
-        createUser.setFullName(user.getFullName());
-        createUser.setRole(user.getRole());
-        createUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        createUser.setEmail(request.getEmail());
+        createUser.setFullName(request.getFullName());
+        createUser.setRole(Role.valueOf(request.getRole()));
+        createUser.setPassword(passwordEncoder.encode(request.getPassword()));
         User saveUser = userRepository.save(createUser);
 
         Cart cart = new Cart();
         cart.setCustomer(saveUser);
         cartRepository.save(cart);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtProvider.generateToken(authentication);
@@ -77,11 +78,14 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     }
 
+
+
     /**
      * Этот метод отвечает за аутентификацию пользователя и генерацию JWT токена при успешной аутентификации.
      * @param request данные аутентификации (логин и пароль)
      * @return возврошает JWT токен, сообщение об успешной аутентификации и роль пользователя.
      */
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signin")
     public ResponseEntity<AuthResponse> signIn(@RequestBody LoginRequest request){
         String username = request.getEmail();
