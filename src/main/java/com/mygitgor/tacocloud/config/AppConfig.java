@@ -35,21 +35,13 @@ public class AppConfig {
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(Authorize -> Authorize
-//                        .requestMatchers("/api/admin/**").hasAnyRole("OWNER", "ADMIN")
-//                        .requestMatchers("/api/**").authenticated()
-//                        .anyRequest().permitAll()
-//                        ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-//                .csrf(csrf -> csrf.disable())
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-//        return http.build();
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for development
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/signup").permitAll()  // Allow signup without authentication
+                .authorizeHttpRequests(Authorize -> Authorize
+                        .requestMatchers("/auth/signup").permitAll()
+                        .requestMatchers("/auth/signin").permitAll()
                         .requestMatchers("/api/admin/**").hasAnyRole("OWNER", "ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
@@ -57,6 +49,7 @@ public class AppConfig {
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class);
 
         return http.build();
+
     }
 
     /**

@@ -19,18 +19,26 @@ import java.util.List;
 public class CustomerUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
-        if(user != null){
-            throw new UsernameNotFoundException("user not found whit email " + username);
-        }
-        Role role = user.getRole();
 
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + username);
+        }
+
+        Role role = user.getRole();
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(new SimpleGrantedAuthority(role.toString()));
+        if (role != null) {
+            authorities.add(new SimpleGrantedAuthority(role.toString()));
+        }
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 }
