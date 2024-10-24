@@ -31,15 +31,16 @@ public class JwtProvider {
      * @param aut принемает обект Authentication
      * @return возврошает jwt токен
      */
-    public String generateToken(Authentication aut){
+    public String generateToken(Authentication aut) {
         Collection<? extends GrantedAuthority> authorities = aut.getAuthorities();
         String roles = populateAuthorities(authorities);
 
-        String jwt = Jwts.builder().setIssuedAt(new Date())
-                .setExpiration((new Date(new Date().getTime()+86400000)))
+        String jwt = Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + 86400000))
                 .claim("email", aut.getName())
                 .claim("authorities", roles)
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
         return jwt;
     }

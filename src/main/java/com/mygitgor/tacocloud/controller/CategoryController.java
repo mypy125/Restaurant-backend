@@ -34,11 +34,12 @@ public class CategoryController {
     }
 
     @SneakyThrows
-    @GetMapping("/category/restaurant")
-    public ResponseEntity<List<Category>> getRestaurantCategory(@RequestHeader("Authorization") String jwt){
+    @GetMapping("/category/restaurant/{id}")
+    public ResponseEntity<List<Category>> getRestaurantCategory(@PathVariable Long id,
+                                                                @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
-        List<Category> createCategory = categoryService.findCategoryByRestaurantId(user.getId());
+        List<Category> createCategory = categoryService.findCategoryByRestaurantId(id);
 
         return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }

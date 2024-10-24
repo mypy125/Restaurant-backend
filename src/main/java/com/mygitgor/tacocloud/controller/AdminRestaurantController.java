@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +24,7 @@ public class AdminRestaurantController {
     private final UserService userService;
 
     @SneakyThrows
+    @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @PostMapping()
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantRequest request,
                                                        @RequestHeader("Authorization") String jwt){

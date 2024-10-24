@@ -101,7 +101,7 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
         authResponse.setMassage("Register success");
-        authResponse.setRole(Role.valueOf(role));
+        authResponse.setRole(role != null ? Role.valueOf(role) : null);
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }

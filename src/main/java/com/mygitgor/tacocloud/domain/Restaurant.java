@@ -24,6 +24,8 @@ public class Restaurant {
 
     private String name;
     private String description;
+
+    @Column(name = "cuisine_type")
     private String cuisineType;
 
     @ManyToOne

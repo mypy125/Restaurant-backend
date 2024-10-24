@@ -73,7 +73,7 @@ public class AppConfig {
 //
 //        };
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:*"));  // Support all localhost ports
+        config.setAllowedOriginPatterns(Collections.singletonList("http://localhost:*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setExposedHeaders(Collections.singletonList("Authorization"));
