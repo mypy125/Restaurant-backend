@@ -2,6 +2,7 @@ package com.mygitgor.tacocloud.service.impl;
 
 import com.mygitgor.tacocloud.config.JwtProvider;
 import com.mygitgor.tacocloud.domain.User;
+import com.mygitgor.tacocloud.dto.UserProfileDto;
 import com.mygitgor.tacocloud.repository.UserRepository;
 import com.mygitgor.tacocloud.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,20 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public void updateUserProfile(UserProfileDto userProfileDto, String jwt) throws Exception {
+        String email = jwtProvider.getEmailFromJwtToken(jwt);
+        User user = findUserByEmail(email);
+
+        if (userProfileDto.getFullName() != null) {
+            user.setFullName(userProfileDto.getFullName());
+        }
+        if (userProfileDto.getEmail() != null) {
+            user.setEmail(userProfileDto.getEmail());
+        }
+        userRepository.save(user);
+    }
+
+
 }

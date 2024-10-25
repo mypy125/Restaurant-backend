@@ -2,7 +2,6 @@ package com.mygitgor.tacocloud.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,16 +30,14 @@ public class JwtProvider {
      * @param aut принемает обект Authentication
      * @return возврошает jwt токен
      */
-    public String generateToken(Authentication aut) {
+    public String generateToken(Authentication aut){
         Collection<? extends GrantedAuthority> authorities = aut.getAuthorities();
         String roles = populateAuthorities(authorities);
-
-        String jwt = Jwts.builder()
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 86400000))
+        String jwt = Jwts.builder().setIssuedAt(new Date())
+                .setExpiration((new Date(new Date().getTime()+86400000)))
                 .claim("email", aut.getName())
                 .claim("authorities", roles)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key)
                 .compact();
         return jwt;
     }
@@ -69,7 +66,6 @@ public class JwtProvider {
     public String getEmailFromJwtToken(String jwt){
         jwt = jwt.substring(7);
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-
         String email = String.valueOf(claims.get("email"));
         return email;
     }

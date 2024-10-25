@@ -101,21 +101,19 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
         authResponse.setMassage("Register success");
-        authResponse.setRole(role != null ? Role.valueOf(role) : null);
+        authResponse.setRole(Role.valueOf(role));
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     private Authentication authenticate(String username, String password) {
         UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
-
         if(userDetails == null){
             throw new BadCredentialsException("invalid username.");
         }
         if(!passwordEncoder.matches(password, userDetails.getPassword())){
             throw new BadCredentialsException("invalid password.");
         }
-
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
