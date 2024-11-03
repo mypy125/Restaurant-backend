@@ -9,6 +9,7 @@ import com.mygitgor.tacocloud.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +40,7 @@ public class FoodServiceImpl implements FoodService {
         food.setIngredients(request.getIngredients());
         food.setSeasonal(request.isSeasonal());
         food.setVegetarian(request.isVegetarian());
+        food.setCreateondate(new Date());
 
         Food FoodSave = foodRepository.save(food);
         restaurant.getFoods().add(FoodSave);

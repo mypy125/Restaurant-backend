@@ -53,4 +53,14 @@ public class RestaurantController {
         RestaurantDto restaurant = restaurantService.addToFavorites(id, user);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping("/{id}/remove-favorites")
+    public ResponseEntity<Void> removeRestaurantFromFavorites(@RequestHeader("Authorization") String jwt,
+                                                                @PathVariable Long id) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        restaurantService.removeFromFavorites(id, user);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -18,6 +18,6 @@ public interface RestaurantService {
     Restaurant findRestaurantByUserId(Long id)throws Exception;
     RestaurantDto addToFavorites(Long restaurantId, User user)throws Exception;
     Restaurant updateRestaurantStatus(Long id)throws Exception;
-
+    void removeFromFavorites(Long restaurantId, User user)throws Exception;
 
 }

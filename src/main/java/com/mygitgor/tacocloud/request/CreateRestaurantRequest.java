@@ -1,5 +1,6 @@
 package com.mygitgor.tacocloud.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mygitgor.tacocloud.domain.Address;
 import com.mygitgor.tacocloud.domain.ContactInformation;
 import lombok.Data;

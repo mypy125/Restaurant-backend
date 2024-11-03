@@ -1,7 +1,6 @@
 package com.mygitgor.tacocloud.config;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,9 +34,11 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
                 Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+
                 String email = String.valueOf(claims.get("email"));
                 String authorities = String.valueOf(claims.get("authorities"));
                 List<GrantedAuthority> aut = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+
                 Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, aut);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }catch (Exception e){

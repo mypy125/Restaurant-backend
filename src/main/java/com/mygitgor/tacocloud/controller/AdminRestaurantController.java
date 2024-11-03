@@ -25,6 +25,7 @@ public class AdminRestaurantController {
 
     @SneakyThrows
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping()
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantRequest request,
                                                        @RequestHeader("Authorization") String jwt){

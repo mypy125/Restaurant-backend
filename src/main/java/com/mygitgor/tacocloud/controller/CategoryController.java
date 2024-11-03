@@ -39,9 +39,9 @@ public class CategoryController {
                                                                 @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
-        List<Category> createCategory = categoryService.findCategoryByRestaurantId(id);
+        List<Category> getCategoryByRestaurantId = categoryService.findCategoryByRestaurantId(id);
 
-        return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
+        return new ResponseEntity<>(getCategoryByRestaurantId, HttpStatus.CREATED);
     }
 
 }

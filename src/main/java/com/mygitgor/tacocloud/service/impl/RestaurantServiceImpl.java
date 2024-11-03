@@ -39,7 +39,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
        Restaurant restaurant = new Restaurant();
        restaurant.setAddress(address);
-       restaurant.setContactInformation(restaurant.getContactInformation());
+       restaurant.setContactInformation(request.getContactInformation());
        restaurant.setCuisineType(request.getCuisineType());
        restaurant.setDescription(request.getDescription());
        restaurant.setImages(request.getImages());
@@ -113,12 +113,9 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public Restaurant findRestaurantById(Long id)throws Exception {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
-        if(restaurant.isEmpty()){
-            throw new Exception("restaurant not found wit id"+id);
-        }
-        return restaurant.get();
+    public Restaurant findRestaurantById(Long id) throws Exception {
+        return restaurantRepository.findById(id)
+                .orElseThrow(() -> new Exception("Restaurant not found with id " + id));
     }
 
     /**
@@ -133,7 +130,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Restaurant findRestaurantByUserId(Long id)throws Exception {
         Restaurant restaurant = restaurantRepository.findByOwnerId(id);
         if(restaurant == null){
-            throw new Exception("restaurant not found wit owner id"+id);
+            throw new Exception("restaurant not found wit owner id "+id);
         }
         return restaurant;
     }
@@ -169,6 +166,19 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         return restaurantDto;
     }
+
+    @Override
+    public void removeFromFavorites(Long restaurantId, User user) throws Exception {
+        Restaurant restaurant = findRestaurantById(restaurantId);
+
+        if (user.getFavorites().stream().anyMatch(fav -> fav.getId().equals(restaurantId))) {
+            user.getFavorites().removeIf(fav -> fav.getId().equals(restaurantId));
+            userRepository.save(user);
+        } else {
+            throw new Exception("Restaurant not found in favorites");
+        }
+    }
+
 
     /**
      * метод предназначен для изменения статуса (открыт/закрыт) ресторана.

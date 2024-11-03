@@ -38,17 +38,21 @@ public class FoodController {
     }
 
     @SneakyThrows
-    @DeleteMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<Food>> getRestaurantFood(@RequestParam boolean vegetarian,
-                                                 @RequestParam boolean seasonal,
-                                                 @RequestParam boolean nonVeg,
-                                                 @RequestParam(required = false)String food_category,
-                                                 @PathVariable Long restaurantId,
-                                                 @RequestHeader("Authorization") String jwt){
+    @GetMapping("/restaurant/{restaurantId}")
+    public ResponseEntity<List<Food>> getRestaurantFood(
+            @RequestParam(defaultValue = "false") boolean vegetarian,
+            @RequestParam(defaultValue = "false") boolean seasonal,
+            @RequestParam(defaultValue = "false") boolean nonVeg,
+            @RequestParam String food_category,
+            @PathVariable Long restaurantId,
+            @RequestHeader("Authorization") String jwt) {
+
         User user = userService.findUserByJwtToken(jwt);
 
         List<Food> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, food_category);
 
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
+
+
 }
