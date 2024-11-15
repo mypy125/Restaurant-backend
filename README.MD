@@ -1,8 +1,8 @@
-# Taco Cloud Restaurant Project
+# Restaurant Project
 
 ## Project Description
 
-**Taco Cloud Restaurant** is a web application for ordering food. Users can browse the menu, select dishes, place orders, and pay online. Administrators can manage the menu, add new dishes, manage orders, and handle user accounts.
+**Restaurant.am** is a web application for ordering food. Users can browse the menu, select dishes, place orders, and pay online. Administrators can manage the menu, add new dishes, manage orders, and handle user accounts.
 
 **Location:** Yerevan  
 **Date:** 04/2024
@@ -11,11 +11,11 @@
 Web Development in Java  
 **Name:** Gagikovich Gor Mkhitaryan
 
-**Project URL:** [https://github.com/mypy125/Taco-Cloud](https://github.com/mypy125/Taco-Cloud)
+**Project URL:** [https://github.com/mypy125/Restaurant.am-backend](https://github.com/mypy125/Restaurant.am-backend)
 
 ## Inspiration
 
-I researched and analyzed many trending products relevant to our market. I decided to create an application that helps people order food without leaving their homes. The name "Taco Cloud" was inspired by Craig Walls' book "Spring in Action," where the examples involved creating a taco-cloud. Initially, the book helped me, but then I added more functionality, more services, and evolved it into what it is now, dividing it into microservices.
+I researched and analyzed many trending products relevant to our market. I decided to create an application that helps people order food without leaving their homes. The name "Restaurant" was inspired by Craig Walls' book "Spring in Action," where the examples involved creating a taco-cloud. Initially, the book helped me, but then I added more functionality, more services, and evolved it into what it is now, dividing it into microservices.
 
 ## Technology Stack
 
@@ -24,7 +24,8 @@ I researched and analyzed many trending products relevant to our market. I decid
 - **Spring Data JPA** for database interaction
 - **Hibernate** as ORM (Object-Relational Mapping)
 - **Spring Security** for ensuring security
-- **JJWT Library** for token encryption
+- **JWT Library** for token encryption
+- **strip Library** for payment system
 
 ## Application Benefits
 
