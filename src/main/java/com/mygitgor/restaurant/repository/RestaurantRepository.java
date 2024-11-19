@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
@@ -15,5 +16,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
          "OR lower(r.cuisineType) LIKE lower(concat('%', :query, '%'))")
     List<Restaurant> findBySearchQuery(@Param("query") String query);
 
-    Restaurant findByOwnerId(Long id);
+    Optional<Restaurant> findByOwnerId(Long id);
 }

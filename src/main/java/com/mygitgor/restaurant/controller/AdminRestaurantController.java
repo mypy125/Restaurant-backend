@@ -31,8 +31,12 @@ public class AdminRestaurantController {
                                                        @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
-        Restaurant restaurant = restaurantService.createRestaurant(request, user);
-        return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+        try {
+            Restaurant restaurant = restaurantService.createRestaurant(request, user);
+            return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
@@ -61,6 +65,7 @@ public class AdminRestaurantController {
 
     @PutMapping("/{id}/status")
     @SneakyThrows
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Restaurant> updateRestaurantStatus(@RequestHeader("Authorization") String jwt,
                                                             @PathVariable Long id){
         User user = userService.findUserByJwtToken(jwt);

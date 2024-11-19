@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * RestaurantService: Этот сервиз связаны с ресторанами
@@ -34,6 +35,11 @@ public class RestaurantServiceImpl implements RestaurantService {
      */
     @Override
     public Restaurant createRestaurant(CreateRestaurantRequest request, User user) {
+        Optional<Restaurant> existingRestaurant = restaurantRepository.findByOwnerId(user.getId());
+        if (existingRestaurant.isPresent()) {
+            throw new RuntimeException("A restaurant already exists for this owner.");
+        }
+
        Address address = addressRepository.save(request.getAddress());
 
        Restaurant restaurant = new Restaurant();
@@ -127,11 +133,8 @@ public class RestaurantServiceImpl implements RestaurantService {
      */
     @Override
     public Restaurant findRestaurantByUserId(Long id)throws Exception {
-        Restaurant restaurant = restaurantRepository.findByOwnerId(id);
-        if(restaurant == null){
-            throw new Exception("restaurant not found wit owner id "+id);
-        }
-        return restaurant;
+        return restaurantRepository.findByOwnerId(id)
+                .orElseThrow(() -> new Exception("Restaurant not found with owner id " + id));
     }
 
     /**
