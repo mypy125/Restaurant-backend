@@ -44,4 +44,10 @@ public class IngredientsController {
         List<IngredientCategory> items = ingredientService.findIngredientCategoryByRestaurantId(id);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}/stoke")
+    public ResponseEntity<IngredientItem> updateIngredientStoke(@PathVariable Long id) throws Exception {
+        IngredientItem items = ingredientService.updateStock(id);
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
 }

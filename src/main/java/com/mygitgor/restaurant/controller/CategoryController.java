@@ -24,6 +24,7 @@ public class CategoryController {
 
     @SneakyThrows
     @PostMapping("/admin/category")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Category> createCategory(@RequestBody Category category,
                                                    @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
