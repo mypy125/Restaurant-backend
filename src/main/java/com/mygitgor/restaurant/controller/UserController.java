@@ -22,6 +22,7 @@ public class UserController {
     @SneakyThrows
     @GetMapping("/profile")
     public ResponseEntity<User> findUserByJwtToken(@RequestHeader("Authorization") String jwt){
+
         User user = userService.findUserByJwtToken(jwt);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

@@ -11,6 +11,7 @@ import com.mygitgor.restaurant.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +27,11 @@ public class AdminFoodController {
     private final RestaurantService restaurantService;
 
     @SneakyThrows
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Food> createFood(@RequestBody CreateFoodRequest request,
                                            @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
-        Restaurant restaurant = restaurantService.findRestaurantById(request.getRestaurantId());
+        Restaurant restaurant = restaurantService.findRestaurantByUserId(user.getId());
         Food food = foodService.createFood(request, request.getCategory(), restaurant);
 
         return new ResponseEntity<>(food, HttpStatus.CREATED);

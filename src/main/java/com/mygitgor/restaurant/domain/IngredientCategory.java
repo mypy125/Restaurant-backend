@@ -1,7 +1,7 @@
 package com.mygitgor.restaurant.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class IngredientCategory {
     @ManyToOne
     private Restaurant restaurant;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<IngredientItem> ingredients = new ArrayList<>();
 }

@@ -2,12 +2,16 @@ package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.domain.Category;
 import com.mygitgor.restaurant.domain.Food;
+import com.mygitgor.restaurant.domain.IngredientItem;
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.repository.FoodRepository;
+import com.mygitgor.restaurant.repository.IngredientItemRepository;
 import com.mygitgor.restaurant.request.CreateFoodRequest;
 import com.mygitgor.restaurant.service.FoodService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
@@ -36,15 +40,16 @@ public class FoodServiceImpl implements FoodService {
         food.setRestaurant(restaurant);
         food.setDescription(request.getDescription());
         food.setImages(request.getImages());
+        food.setName(request.getName());
         food.setPrice(request.getPrice());
         food.setIngredients(request.getIngredients());
         food.setSeasonal(request.isSeasonal());
-        food.setCreateondate(new Date());
         food.setVegetarian(request.isVegetarian());
+        food.setCreateondate(new Date());
 
-        Food FoodSave = foodRepository.save(food);
-        restaurant.getFoods().add(FoodSave);
-        return FoodSave;
+        Food foodSave = foodRepository.save(food);
+        restaurant.getFoods().add(foodSave);
+        return foodSave;
     }
 
     /**
@@ -84,10 +89,10 @@ public class FoodServiceImpl implements FoodService {
         if(isSeasonal){
             foods = filterBySeasonal(foods, isSeasonal);
         }
-        if(foodCategory != null && !foodCategory.equals("")){
+        if(foodCategory != null && !foodCategory.trim().isEmpty()){
             foods = filterByCategory(foods, foodCategory);
         }
-        return null;
+        return foods;
     }
 
     /**
@@ -158,12 +163,10 @@ public class FoodServiceImpl implements FoodService {
      */
     @Override
     public Food findFoodById(Long id) throws Exception {
-        Optional<Food> food = foodRepository.findById(id);
-        if(food.isEmpty()){
-            throw  new Exception("Food not found");
-        }
-        return food.get();
+        return foodRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Food not found with id: " + id));
     }
+
 
     /**
      * метод предназначен для обновления статуса доступности блюда.

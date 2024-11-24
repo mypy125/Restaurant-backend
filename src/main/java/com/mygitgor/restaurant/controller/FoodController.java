@@ -45,10 +45,11 @@ public class FoodController {
             @PathVariable Long restaurantId,
             @RequestHeader("Authorization") String jwt) {
 
+        if (restaurantId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         User user = userService.findUserByJwtToken(jwt);
-
         List<Food> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, food_category);
-
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
