@@ -2,6 +2,7 @@ package com.mygitgor.restaurant.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class IngredientItem {
     private String name;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonManagedReference
     private IngredientCategory category;
 
     @JsonIgnore
