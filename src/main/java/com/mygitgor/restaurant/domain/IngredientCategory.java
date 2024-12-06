@@ -26,6 +26,6 @@ public class IngredientCategory {
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference
     private List<IngredientItem> ingredients = new ArrayList<>();
 }

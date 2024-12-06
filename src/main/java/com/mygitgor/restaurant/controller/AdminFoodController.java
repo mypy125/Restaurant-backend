@@ -38,7 +38,7 @@ public class AdminFoodController {
     }
 
     @SneakyThrows
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteFood(@PathVariable Long id,
                                            @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);

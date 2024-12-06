@@ -21,7 +21,7 @@ public class CreateFoodRequest {
     private boolean vegetarian;
     private boolean seasonal;
 
-    @JsonBackReference
+//    @JsonBackReference
     private List<IngredientItem> ingredients;
 
 }

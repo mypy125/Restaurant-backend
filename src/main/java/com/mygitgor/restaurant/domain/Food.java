@@ -1,5 +1,6 @@
 package com.mygitgor.restaurant.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +39,7 @@ public class Food {
     private boolean isSeasonal;
 
     @ManyToMany
+    @JsonManagedReference
     private List<IngredientItem> ingredients = new ArrayList<>();
 
     private Date createondate;

@@ -1,15 +1,25 @@
+
+
+
 spring:
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
-#    hikari:
-#      maximum-pool-size: 10
-#      connection-timeout: 30000
-#      idle-timeout: 600000
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      idle-timeout: 600000
 
   jpa:
+#    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:
