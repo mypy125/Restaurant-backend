@@ -42,7 +42,7 @@ public class AdminFoodController {
     public ResponseEntity<MessageResponse> deleteFood(@PathVariable Long id,
                                            @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
-        foodService.findFoodById(id);
+        foodService.deleteFood(id);
 
         MessageResponse msg = new MessageResponse();
         msg.setMassage("food deleted successfully");
