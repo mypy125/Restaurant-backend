@@ -5,6 +5,8 @@ import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.repository.CategoryRepository;
 import com.mygitgor.restaurant.service.CategoryService;
 import com.mygitgor.restaurant.service.RestaurantService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

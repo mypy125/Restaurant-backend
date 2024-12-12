@@ -2,9 +2,11 @@ package com.mygitgor.restaurant.service;
 
 import com.mygitgor.restaurant.domain.IngredientCategory;
 import com.mygitgor.restaurant.domain.IngredientItem;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface IngredientService {
     IngredientCategory createIngredientCategory(String name, Long restaurantId)throws Exception;
     IngredientCategory findIngredientCategoryById(Long id)throws Exception;

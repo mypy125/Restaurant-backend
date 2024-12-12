@@ -6,11 +6,13 @@ import com.mygitgor.restaurant.domain.IngredientItem;
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.repository.FoodRepository;
 import com.mygitgor.restaurant.repository.IngredientItemRepository;
+import com.mygitgor.restaurant.repository.RestaurantRepository;
 import com.mygitgor.restaurant.request.CreateFoodRequest;
 import com.mygitgor.restaurant.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
+    private final RestaurantRepository restaurantRepository;
 
     /**
      *  метод предназначен для создания нового блюда в ресторане.
@@ -33,24 +36,30 @@ public class FoodServiceImpl implements FoodService {
      * @param restaurant принемает конкретный ресторан
      * @return возврошает блюду
      */
+    @Transactional
     @Override
     public Food createFood(CreateFoodRequest request, Category category, Restaurant restaurant) {
         Food food = new Food();
         food.setFoodCategory(category);
         food.setRestaurant(restaurant);
         food.setDescription(request.getDescription());
-        food.setImages(request.getImages());
         food.setName(request.getName());
         food.setPrice(request.getPrice());
         food.setIngredients(request.getIngredients());
         food.setSeasonal(request.isSeasonal());
         food.setVegetarian(request.isVegetarian());
         food.setCreateondate(new Date());
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
+            food.setImages(request.getImages());
+        }
 
-        Food foodSave = foodRepository.save(food);
-        restaurant.getFoods().add(foodSave);
-        return foodSave;
+        restaurant.getFoods().add(food);
+        foodRepository.save(food);
+        restaurantRepository.save(restaurant);
+
+        return food;
     }
+
 
     /**
      * метод предназначен для удаления блюда из базы данных.
