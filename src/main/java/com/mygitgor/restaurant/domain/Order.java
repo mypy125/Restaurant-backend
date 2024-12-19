@@ -35,7 +35,10 @@ public class Order {
     @OneToMany
     private List<OrderItem> items;
 
-//    private Payment payment;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_id", referencedColumnName = "id")
+    private Payment payment;
+
     private int totalItem;
     private Long totalPrice;
 

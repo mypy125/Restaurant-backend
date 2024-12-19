@@ -30,12 +30,21 @@ public class OrderController {
     @SneakyThrows
     @PostMapping("/order")
     public ResponseEntity<PaymentResponse> createOrder(@RequestBody OrderRequest request,
-                                                       @RequestHeader("Authorization") String jwt){
+                                                       @RequestHeader("Authorization") String jwt,
+                                                       @RequestParam("paymentMethod") String paymentMethod) {
         User user = userService.findUserByJwtToken(jwt);
         Order order = orderService.createOrder(request, user);
-        PaymentResponse response = paymentService.createPaymentLink(order);
+
+        PaymentResponse response = switch (paymentMethod.toLowerCase()) {
+            case "stripe" -> paymentService.createStripePaymentLink(order);
+            case "easypay" -> paymentService.createEasyPayPaymentLink(order);
+            case "idram" -> paymentService.createIdramPaymentLink(order);
+            default -> throw new IllegalArgumentException("Unsupported payment method " + paymentMethod);
+        };
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     @SneakyThrows
     @PostMapping("/order/user")

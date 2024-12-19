@@ -26,7 +26,20 @@ spring:
 server:
   port: 8080
 
-#stripe:
-#  api:
-#    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
-#
+stripe:
+  api:
+    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+
+idram:
+  api:
+    url: https://api.idram.am/payment/create
+    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+
+easypay:
+  api:
+    url: https://api.easypay.am/payment/create
+    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+
+logging:
+  level:
+    org.springframework.boot.context.properties: DEBUG

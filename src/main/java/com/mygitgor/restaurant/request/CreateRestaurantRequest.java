@@ -1,5 +1,7 @@
 package com.mygitgor.restaurant.request;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mygitgor.restaurant.convertor.ImageListDeserializer;
 import com.mygitgor.restaurant.domain.Address;
 import com.mygitgor.restaurant.domain.ContactInformation;
 import lombok.Data;
@@ -15,5 +17,6 @@ public class CreateRestaurantRequest {
     private Address address;
     private ContactInformation contactInformation;
     private String openingHours;
+    @JsonDeserialize(using = ImageListDeserializer.class)
     private List<String> images;
 }
