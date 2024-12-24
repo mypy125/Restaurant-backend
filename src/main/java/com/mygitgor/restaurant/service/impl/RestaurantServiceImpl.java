@@ -23,8 +23,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
-    private final AddressRepository addressRepository;
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
 
     /**
@@ -40,19 +40,19 @@ public class RestaurantServiceImpl implements RestaurantService {
             throw new RuntimeException("A restaurant already exists for this owner.");
         }
 
-       Address address = addressRepository.save(request.getAddress());
+        Address address = addressRepository.save(request.getAddress());
 
-       Restaurant restaurant = new Restaurant();
-       restaurant.setAddress(address);
-       restaurant.setContactInformation(request.getContactInformation());
-       restaurant.setCuisineType(request.getCuisineType());
-       restaurant.setDescription(request.getDescription());
-       restaurant.setImages(request.getImages());
-       restaurant.setName(request.getName());
-       restaurant.setOpeningHours(request.getOpeningHours());
-       restaurant.setRegistrationTime(LocalDateTime.now());
-       restaurant.setOwner(user);
-       return restaurantRepository.save(restaurant);
+        Restaurant restaurant = new Restaurant();
+        restaurant.setAddress(address);
+        restaurant.setContactInformation(request.getContactInformation());
+        restaurant.setCuisineType(request.getCuisineType());
+        restaurant.setDescription(request.getDescription());
+        restaurant.setImages(request.getImages());
+        restaurant.setName(request.getName());
+        restaurant.setOpeningHours(request.getOpeningHours());
+        restaurant.setRegistrationTime(LocalDateTime.now());
+        restaurant.setOwner(user);
+        return restaurantRepository.save(restaurant);
     }
 
     /**

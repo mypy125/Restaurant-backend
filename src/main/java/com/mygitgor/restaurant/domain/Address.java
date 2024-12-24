@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 
 @Entity
 @Data
@@ -14,4 +16,15 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    private String streetAddress;
+    private String city;
+    private String stateProvince;
+    private String postalCode;
+    private String country;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }

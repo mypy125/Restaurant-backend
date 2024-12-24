@@ -29,7 +29,9 @@ public class Order {
     private Long totalAmount;
     private String orderStatus;
     private Date createAt;
-    @ManyToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address deliveryAddress;
 
     @OneToMany
