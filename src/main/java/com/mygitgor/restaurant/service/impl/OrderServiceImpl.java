@@ -1,11 +1,13 @@
 package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.domain.*;
+import com.mygitgor.restaurant.dto.AddressDto;
 import com.mygitgor.restaurant.repository.AddressRepository;
 import com.mygitgor.restaurant.repository.OrderItemRepository;
 import com.mygitgor.restaurant.repository.OrderRepository;
 import com.mygitgor.restaurant.repository.UserRepository;
 import com.mygitgor.restaurant.request.OrderRequest;
+import com.mygitgor.restaurant.service.AddressService;
 import com.mygitgor.restaurant.service.CartService;
 import com.mygitgor.restaurant.service.OrderService;
 import com.mygitgor.restaurant.service.RestaurantService;
@@ -26,7 +28,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
     private final UserRepository userRepository;
     private final RestaurantService restaurantService;
     private final CartService cartService;
@@ -41,13 +43,8 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order createOrder(OrderRequest request, User user) throws Exception {
-        Address shopAddress = request.getDeliveryAddress();
-        Address saveAddress = addressRepository.save(shopAddress);
-
-        if(!user.getAddresses().contains(saveAddress)){
-            user.getAddresses().add(shopAddress);
-            userRepository.save(user);
-        }
+        AddressDto shopAddress = request.getDeliveryAddress();
+        Address savedAddress = addressService.saveUserAddress(shopAddress, user);
 
         Restaurant restaurant = restaurantService.findRestaurantById(request.getRestaurantId());
 
@@ -55,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
         createOrder.setCustomer(user);
         createOrder.setCreateAt(new Date());
         createOrder.setOrderStatus("PENDING");
-        createOrder.setDeliveryAddress(saveAddress);
+        createOrder.setDeliveryAddress(savedAddress);
         createOrder.setRestaurant(restaurant);
 
         Cart cart = cartService.findCartByUserId(user.getId());

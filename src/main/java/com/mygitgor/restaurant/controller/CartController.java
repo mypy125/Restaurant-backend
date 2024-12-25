@@ -3,6 +3,7 @@ package com.mygitgor.restaurant.controller;
 import com.mygitgor.restaurant.domain.Cart;
 import com.mygitgor.restaurant.domain.CartItem;
 import com.mygitgor.restaurant.domain.User;
+import com.mygitgor.restaurant.exceptions.userexception.UserNotFoundException;
 import com.mygitgor.restaurant.request.AddCartItemRequest;
 import com.mygitgor.restaurant.request.UpdateCartItemRequest;
 import com.mygitgor.restaurant.service.CartService;
@@ -35,6 +36,10 @@ public class CartController {
     @PutMapping("/cart-item/update")
     public ResponseEntity<CartItem> updateCartItemQuantity(@RequestBody UpdateCartItemRequest request,
                                                   @RequestHeader("Authorization") String jwt){
+        User user = userService.findUserByJwtToken(jwt);
+        if (user == null) {
+            throw new UserNotFoundException("User not found");
+        }
         CartItem cartItem = cartService.updateCartItemQuantity(request.getId(), request.getQuantity());
         return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }

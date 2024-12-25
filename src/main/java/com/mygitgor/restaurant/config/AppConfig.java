@@ -1,5 +1,6 @@
 package com.mygitgor.restaurant.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,6 +31,7 @@ public class AppConfig {
      * Он настраивает сессии для политики без состояния,
      * авторизует запросы в зависимости от ролей пользователей,
      * добавляет фильтр для проверки токена JWT и настраивает CSRF и CORS.
+     *
      * @param http HTTP-запрос
      * @return возвращает объект SecurityFilterChain, который представляет собой цепочку фильтров безопасности Spring Security.
      * @throws Exception бросает исключения Exception
@@ -63,6 +65,7 @@ public class AppConfig {
 
     /**
      * Этот бин определяет конфигурацию CORS для разрешения запросов с определенных источников.
+     *
      * @return возвращает объект CorsConfigurationSource
      */
     private CorsConfigurationSource corsConfigurationSource() {
@@ -81,13 +84,21 @@ public class AppConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     /**
      * Этот бин предоставляет PasswordEncoder, который используется для хеширования паролей пользователей,
      * чтобы обеспечить безопасность хранения паролей.
+     *
      * @return возвращает объект PasswordEncoder
      */
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
 }

@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.domain.Cart;
 import com.mygitgor.restaurant.domain.CartItem;
 import com.mygitgor.restaurant.domain.Food;
 import com.mygitgor.restaurant.domain.User;
+import com.mygitgor.restaurant.exceptions.cartexception.CartItemNotFoundException;
 import com.mygitgor.restaurant.repository.CartItemRepository;
 import com.mygitgor.restaurant.repository.CartRepository;
 import com.mygitgor.restaurant.request.AddCartItemRequest;
@@ -66,13 +67,14 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws Exception {
-        Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
-        if(cartItemOptional.isEmpty()){
-            throw new Exception("cart item not found");
+    public CartItem updateCartItemQuantity(Long cartItemId, int quantity)throws CartItemNotFoundException{
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException("Cart item not found"));
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero");
         }
 
-        CartItem cartItem = cartItemOptional.get();
         cartItem.setQuantity(quantity);
         cartItem.setTotalPrice(cartItem.getFood().getPrice() * quantity);
 

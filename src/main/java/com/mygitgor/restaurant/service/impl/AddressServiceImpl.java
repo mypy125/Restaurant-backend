@@ -25,6 +25,19 @@ public class AddressServiceImpl implements AddressService {
 
 
     @Override
+    public Address saveUserAddress(AddressDto addressDto, User user) throws AddressAlreadyExistsException {
+        Optional<Address> existingAddress = addressRepository.findByStreetAddressAndUser(addressDto.getStreetAddress(), user);
+
+        if (existingAddress.isPresent()) {
+            return existingAddress.get();
+        }
+
+        Address address = modelMapper.map(addressDto, Address.class);
+        address.setUser(user);
+        return addressRepository.save(address);
+    }
+
+    @Override
     public List<AddressDto> getAllAddresses(User user) throws AddressNotFoundException {
         List<Address> addresses = addressRepository.findByUser(user);
         if (addresses.isEmpty()) {
