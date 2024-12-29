@@ -16,11 +16,11 @@ spring:
       idle-timeout: 600000
 
   jpa:
-#    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
 
 server:
@@ -40,6 +40,6 @@ easypay:
     url: https://api.easypay.am/payment/create
     key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
 
-#logging:
-#  level:
-#    org.springframework.boot.context.properties: DEBUG
+logging:
+  level:
+    org.springframework.boot.context.properties: DEBUG

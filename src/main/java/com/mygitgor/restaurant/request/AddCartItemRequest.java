@@ -1,5 +1,7 @@
 package com.mygitgor.restaurant.request;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mygitgor.restaurant.convertor.IngredientItemListStringDeserializer;
 import lombok.Data;
 
 import java.util.List;
@@ -8,5 +10,6 @@ import java.util.List;
 public class AddCartItemRequest {
     private Long foodId;
     private int quantity;
+    @JsonDeserialize(using = IngredientItemListStringDeserializer.class)
     private List<String> ingredients;
 }
