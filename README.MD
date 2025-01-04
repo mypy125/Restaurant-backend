@@ -2,54 +2,109 @@
 
 ## Project Description
 
-**Restaurant.am** is a web application for ordering food. Users can browse the menu, select dishes, place orders, and pay online. Administrators can manage the menu, add new dishes, manage orders, and handle user accounts.
+**Restaurant.am** is a web application designed for seamless food ordering. It allows users to browse restaurant menus, place orders, and make secure online payments. Administrators can manage restaurant menus, track orders, and handle user accounts.
 
-**Location:** Yerevan  
-**Date:** 04/2024
+- **Location:** Yerevan
+- **Launch Date:** 04/2024
+- **Developer:** Gagikovich Gor Mkhitaryan
+- **Project URL:** [Restaurant.am Backend Repository](https://github.com/mypy125/Restaurant.am-backend)
 
-**Developer:**  
-Web Development in Java  
-**Name:** Gagikovich Gor Mkhitaryan
-
-**Project URL:** [https://github.com/mypy125/Restaurant.am-backend](https://github.com/mypy125/Restaurant.am-backend)
+---
 
 ## Inspiration
 
-I researched and analyzed many trending products relevant to our market. I decided to create an application that helps people order food without leaving their homes. The name "Restaurant" was inspired by Craig Walls' book "Spring in Action," where the examples involved creating a taco-cloud. Initially, the book helped me, but then I added more functionality, more services, and evolved it into what it is now, dividing it into microservices.
+This project was inspired by Craig Walls' *Spring in Action*, where an example was created around taco-cloud applications. I wanted to build something that serves real-world needs—helping people conveniently order food from home. The initial concept started simple but evolved into a scalable and modular microservices architecture.
+
+---
 
 ## Technology Stack
 
-- **Spring Web** for web component development
-- **PostgreSQL** for the database
-- **Spring Data JPA** for database interaction
-- **Hibernate** as ORM (Object-Relational Mapping)
-- **Spring Security** for ensuring security
-- **JWT Library** for token encryption
-- **strip Library** for payment system
+### Frontend
+
+- 🚀 **React.js** - A JavaScript library for building user interfaces
+- 💻 **HTML/CSS** - Markup and styling
+- 📱 **Responsive Design** - Ensuring the app works well across all device sizes
+
+### Backend
+
+- 🔧 **Java 17** - Programming language
+- 🌐 **Spring Boot** - Framework for building microservices and APIs
+- 🖥️ **Spring Web** - For the web layer development
+- 📊 **Spring Data JPA** - For database interactions
+- 🛡️ **Spring Security** - For securing user authentication and authorization
+- 🔑 **JWT (JSON Web Token)** - For secure token-based authentication
+
+### Database
+
+- 🗃️ **PostgreSQL** - Relational database management system
+- 🔗 **Hibernate ORM** - For object-relational mapping between Java objects and database tables
+
+### Payment Integration
+
+- 💳 **Stripe API, Idram, EasyPay** - For handling online payments
+
+---
 
 ## Application Benefits
 
-- Convenient and easy online food ordering
-- Wide selection of restaurants and dishes
-- Secure transactions and user data processing
-- Flexible microservices architecture for scalability and development
+- **Convenient Ordering**: Allows users to easily order food from a wide variety of restaurants.
+- **Secure Payments**: Integration with Stripe ensures secure online transactions.
+- **Scalable Architecture**: Built using microservices to ensure easy scaling and maintainability.
+- **Flexible**: Supports multiple restaurants, a variety of dishes, and customizations.
+
+---
 
 ## Functional Features
 
-- Search for restaurants and dishes
-- View menu and place orders
-- Payment and order management
-- User authentication and security
-- Account and favorites management
+### User Features:
 
-## Entities Used
+- 🔍 **Search for Restaurants & Dishes**: Find and browse restaurants and their menus.
+- 🍽️ **Order Management**: Add items to the cart, place an order, and manage orders in real time.
+- 💳 **Secure Payments**: Integration with Stripe to securely handle payments.
+- 🔐 **Authentication**: Secure user login using JWT tokens.
+- ⭐ **Favorites**: Save favorite restaurants and dishes for easy access later.
 
-The application utilizes 13 entities:
+### Admin Features:
 
-- **User, Role, ContactInformation:** Related to authentication and user management.
-- **Address, Category:** Address pertains to location information, and Category to food categories.
-- **Food, IngredientCategory, IngredientItem:** Related to products and ingredients.
-- **Cart, CartItem, Order, OrderItem:** Related to order processing and shopping cart.
-- **Restaurant:** Related to restaurants.
+- 🧑‍🍳 **Menu Management**: Add, edit, or remove dishes from the restaurant’s menu.
+- 📊 **Order Tracking**: Monitor and manage customer orders in the admin dashboard.
+- 👤 **User Management**: Handle user accounts and roles.
 
-In the future, each of these services will have its own database containing only the necessary tables for its operation. This will ensure a more modular and scalable architecture for my project.
+---
+
+## Microservices & Entity Relationships
+
+The application is designed with a **microservices architecture** to enhance scalability. Each service has its own database to ensure modularity and efficiency. Below are the core entities used:
+
+### Entities:
+1. **User**: Stores user information and roles.
+2. **Role**: Defines different user roles (e.g., customer, admin).
+3. **ContactInformation**: Stores user contact details.
+4. **Address**: Stores delivery address information.
+5. **Category**: Represents food categories (e.g., pizza, sushi).
+6. **Food**: Represents a menu item.
+7. **IngredientCategory & IngredientItem**: Define ingredients and ingredient categories.
+8. **Cart**: Represents a user's current order.
+9. **CartItem**: Represents items within a cart.
+10. **Order**: Represents a finalized customer order.
+11. **OrderItem**: Represents individual items in an order.
+12. **Restaurant**: Stores restaurant details.
+
+---
+
+### Future Plans:
+- **Decentralized Databases**: Each microservice will have its own database containing only the necessary tables. This will ensure a more scalable and efficient architecture.
+
+---
+
+## Architecture Overview
+
+The system follows a **microservices architecture**:
+
+- **Services** communicate via **REST APIs**.
+- **Spring Security** is used to ensure secure access control.
+- **JWT** ensures stateless and scalable user authentication.
+- **PostgreSQL** serves as the relational database, with **Spring Data JPA** and **Hibernate ORM** facilitating easy data management.
+
+### Architecture Diagram:
+
