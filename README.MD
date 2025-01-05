@@ -106,5 +106,10 @@ The system follows a **microservices architecture**:
 - **JWT** ensures stateless and scalable user authentication.
 - **PostgreSQL** serves as the relational database, with **Spring Data JPA** and **Hibernate ORM** facilitating easy data management.
 
-### Architecture Diagram:
+---
+
+## License
+
+This project is licensed under the terms of the GNU General Public License v3.0. See the [LICENSE](https://github.com/mypy125/Restaurant.am-backend/blob/main/LICENSE.txt) file for more details.
+
 
