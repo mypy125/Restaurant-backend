@@ -1,3 +1,9 @@
+server:
+  port: 8080
+dotenv:
+  enabled: true
+  override: true
+
 spring:
   jackson:
     default-property-inclusion: non_null
@@ -6,9 +12,9 @@ spring:
     deserialization:
       fail-on-unknown-properties: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: root
-    password: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -23,22 +29,31 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show-sql: true
 
-server:
-  port: 8080
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
 
-stripe:
-  api:
-    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+  stripe:
+    api:
+      key: ${STRIPE_API_KEY}
 
-idram:
-  api:
-    url: https://api.idram.am/payment/create
-    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+  idram:
+    api:
+      url: ${IDRAM_API_URL}
+      key: ${IDRAM_API_KEY}
 
-easypay:
-  api:
-    url: https://api.easypay.am/payment/create
-    key: pk_test_51PLoRORv4Iso1jMzem1wp8wTkEdzMdrirTxOeFUpwXDYpOjdH6wYOYS5pcI7hRCZkC83xDJ6zyvALuc3mxbqVPti00Gc3fHV4G
+  easypay:
+    api:
+      url: ${EASYPAY_API_URL}
+      key: ${EASYPAY_API_KEY}
 
 logging:
   level:

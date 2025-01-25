@@ -3,24 +3,19 @@ package com.mygitgor.restaurant.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mygitgor.restaurant.dto.RestaurantDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+public class User extends BaseEntity{
     private String fullName;
     private String email;
     private String password;

@@ -1,6 +1,5 @@
 package com.mygitgor.restaurant.request;
 
-import com.mygitgor.restaurant.domain.Address;
 import com.mygitgor.restaurant.dto.AddressDto;
 import lombok.Data;
 

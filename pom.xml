@@ -22,6 +22,7 @@
 		<mockhito-core.version>5.12.0</mockhito-core.version>
 		<com-stripe.version>25.9.0</com-stripe.version>
 		<modelmapper.verssion>3.1.0</modelmapper.verssion>
+		<spring-dotenv.version>3.0.0</spring-dotenv.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,6 +44,11 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>me.paulschwarz</groupId>
+			<artifactId>spring-dotenv</artifactId>
+			<version>${spring-dotenv.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
