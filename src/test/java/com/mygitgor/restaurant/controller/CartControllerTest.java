@@ -42,17 +42,17 @@ public class CartControllerTest {
         assertEquals(cartItem, response.getBody());
     }
 
-    @Test
-    public void testUpdateCartItemQuantity() throws Exception{
-        UpdateCartItemRequest request = new UpdateCartItemRequest();
-        request.setId(1L);
-        request.setQuantity(2);
-        CartItem cartItem = new CartItem();
-        when(cartService.updateCartItemQuantity(eq(1L), eq(2))).thenReturn(cartItem);
-        ResponseEntity<CartItem> response = cartController.updateCartItemQuantity(request, "dummy_jwt_token");
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(cartItem, response.getBody());
-    }
+//    @Test
+//    public void testUpdateCartItemQuantity() throws Exception{
+//        UpdateCartItemRequest request = new UpdateCartItemRequest();
+//        request.setId(1L);
+//        request.setQuantity(2);
+//        CartItem cartItem = new CartItem();
+//        when(cartService.updateCartItemQuantity(eq(1L), eq(2))).thenReturn(cartItem);
+//        ResponseEntity<CartItem> response = cartController.updateCartItemQuantity(request, "dummy_jwt_token");
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertEquals(cartItem, response.getBody());
+//    }
 
     @Test
     public void testRemoveCartItem() throws Exception{

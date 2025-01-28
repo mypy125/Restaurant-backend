@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public void calcelOrder(Long orderId) throws Exception {
+    public void cancelOrder(Long orderId) throws Exception {
         Order order = findOrderById(orderId);
         orderRepository.deleteById(orderId);
     }
