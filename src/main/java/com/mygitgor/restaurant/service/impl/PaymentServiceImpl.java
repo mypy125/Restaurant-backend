@@ -2,7 +2,7 @@ package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.config.PaymentConfig;
 import com.mygitgor.restaurant.domain.Order;
-import com.mygitgor.restaurant.response.PaymentResponse;
+import com.mygitgor.restaurant.controller.DTOs.response.PaymentResponse;
 import com.mygitgor.restaurant.service.PaymentService;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
@@ -10,7 +10,6 @@ import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;

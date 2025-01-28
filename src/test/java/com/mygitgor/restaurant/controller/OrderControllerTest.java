@@ -2,8 +2,8 @@ package com.mygitgor.restaurant.controller;
 
 import com.mygitgor.restaurant.domain.Order;
 import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.request.OrderRequest;
-import com.mygitgor.restaurant.response.PaymentResponse;
+import com.mygitgor.restaurant.controller.DTOs.request.OrderRequest;
+import com.mygitgor.restaurant.controller.DTOs.response.PaymentResponse;
 import com.mygitgor.restaurant.service.OrderService;
 import com.mygitgor.restaurant.service.PaymentService;
 import com.mygitgor.restaurant.service.UserService;

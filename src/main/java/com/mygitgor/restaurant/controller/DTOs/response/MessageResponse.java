@@ -1,4 +1,4 @@
-package com.mygitgor.restaurant.response;
+package com.mygitgor.restaurant.controller.DTOs.response;
 
 import lombok.Data;
 

@@ -3,7 +3,7 @@ package com.mygitgor.restaurant.service;
 import com.mygitgor.restaurant.domain.Cart;
 import com.mygitgor.restaurant.domain.CartItem;
 import com.mygitgor.restaurant.exceptions.cartexception.CartItemNotFoundException;
-import com.mygitgor.restaurant.request.AddCartItemRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.AddCartItemRequest;
 
 public interface CartService {
     CartItem addItemToCart(AddCartItemRequest request, String jwt)throws Exception;

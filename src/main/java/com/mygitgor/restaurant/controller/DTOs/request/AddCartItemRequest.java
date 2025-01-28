@@ -1,4 +1,4 @@
-package com.mygitgor.restaurant.request;
+package com.mygitgor.restaurant.controller.DTOs.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mygitgor.restaurant.convertor.IngredientItemListStringDeserializer;

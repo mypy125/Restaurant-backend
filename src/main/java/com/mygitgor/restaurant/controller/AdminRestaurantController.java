@@ -2,8 +2,8 @@ package com.mygitgor.restaurant.controller;
 
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.request.CreateRestaurantRequest;
-import com.mygitgor.restaurant.response.MessageResponse;
+import com.mygitgor.restaurant.controller.DTOs.request.CreateRestaurantRequest;
+import com.mygitgor.restaurant.controller.DTOs.response.MessageResponse;
 import com.mygitgor.restaurant.service.RestaurantService;
 import com.mygitgor.restaurant.service.UserService;
 import lombok.RequiredArgsConstructor;

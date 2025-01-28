@@ -2,11 +2,10 @@ package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.domain.*;
 import com.mygitgor.restaurant.dto.AddressDto;
-import com.mygitgor.restaurant.repository.AddressRepository;
 import com.mygitgor.restaurant.repository.OrderItemRepository;
 import com.mygitgor.restaurant.repository.OrderRepository;
 import com.mygitgor.restaurant.repository.UserRepository;
-import com.mygitgor.restaurant.request.OrderRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.OrderRequest;
 import com.mygitgor.restaurant.service.AddressService;
 import com.mygitgor.restaurant.service.CartService;
 import com.mygitgor.restaurant.service.OrderService;

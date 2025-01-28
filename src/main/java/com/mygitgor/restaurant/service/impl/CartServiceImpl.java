@@ -7,7 +7,7 @@ import com.mygitgor.restaurant.domain.User;
 import com.mygitgor.restaurant.exceptions.cartexception.CartItemNotFoundException;
 import com.mygitgor.restaurant.repository.CartItemRepository;
 import com.mygitgor.restaurant.repository.CartRepository;
-import com.mygitgor.restaurant.request.AddCartItemRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.AddCartItemRequest;
 import com.mygitgor.restaurant.service.CartService;
 import com.mygitgor.restaurant.service.FoodService;
 import com.mygitgor.restaurant.service.UserService;

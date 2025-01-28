@@ -2,8 +2,8 @@ package com.mygitgor.restaurant.controller;
 
 import com.mygitgor.restaurant.domain.IngredientCategory;
 import com.mygitgor.restaurant.domain.IngredientItem;
-import com.mygitgor.restaurant.request.IngredientCategoryRequest;
-import com.mygitgor.restaurant.request.IngredientRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.IngredientCategoryRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.IngredientRequest;
 import com.mygitgor.restaurant.service.IngredientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

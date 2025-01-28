@@ -3,7 +3,7 @@ package com.mygitgor.restaurant.service;
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.domain.User;
 import com.mygitgor.restaurant.dto.RestaurantDto;
-import com.mygitgor.restaurant.request.CreateRestaurantRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.CreateRestaurantRequest;
 
 import java.util.List;
 

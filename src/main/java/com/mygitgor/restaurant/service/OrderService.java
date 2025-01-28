@@ -2,7 +2,7 @@ package com.mygitgor.restaurant.service;
 
 import com.mygitgor.restaurant.domain.Order;
 import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.request.OrderRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.OrderRequest;
 
 import java.util.List;
 

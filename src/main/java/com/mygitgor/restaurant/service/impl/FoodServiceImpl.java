@@ -2,12 +2,10 @@ package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.domain.Category;
 import com.mygitgor.restaurant.domain.Food;
-import com.mygitgor.restaurant.domain.IngredientItem;
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.repository.FoodRepository;
-import com.mygitgor.restaurant.repository.IngredientItemRepository;
 import com.mygitgor.restaurant.repository.RestaurantRepository;
-import com.mygitgor.restaurant.request.CreateFoodRequest;
+import com.mygitgor.restaurant.controller.DTOs.request.CreateFoodRequest;
 import com.mygitgor.restaurant.service.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
