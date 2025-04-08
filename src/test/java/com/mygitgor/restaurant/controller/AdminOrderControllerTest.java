@@ -1,9 +1,10 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Order;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.service.OrderService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.AdminOrderController;
+import com.mygitgor.restaurant.infrastructure.database.entity.OrderEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.application.service.OrderService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,20 +35,20 @@ public class AdminOrderControllerTest {
 
     @Test
     public void testGetOrderHistory() throws Exception {
-        List<Order> orders = new ArrayList<>();
-        when(userService.findUserByJwtToken(anyString())).thenReturn(new User());
+        List<OrderEntity> orders = new ArrayList<>();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(new UserEntity());
         when(orderService.getRestaurantsOrder(anyLong(), anyString())).thenReturn(orders);
-        ResponseEntity<List<Order>> response = adminOrderController.getOrderHistory(1L, "status", "dummy_jwt_token");
+        ResponseEntity<List<OrderEntity>> response = adminOrderController.getOrderHistory(1L, "status", "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(orders, response.getBody());
     }
 
     @Test
     public void testUpdateOrderStatus() throws Exception {
-        Order order = new Order();
-        when(userService.findUserByJwtToken(anyString())).thenReturn(new User());
+        OrderEntity order = new OrderEntity();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(new UserEntity());
         when(orderService.updateOrder(anyLong(), anyString())).thenReturn(order);
-        ResponseEntity<Order> response = adminOrderController.updateOrderStatus(1L, "status", "dummy_jwt_token");
+        ResponseEntity<OrderEntity> response = adminOrderController.updateOrderStatus(1L, "status", "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(order, response.getBody());
     }

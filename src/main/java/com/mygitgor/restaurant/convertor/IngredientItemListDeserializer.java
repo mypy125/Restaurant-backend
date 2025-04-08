@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.mygitgor.restaurant.domain.IngredientItem;
+import com.mygitgor.restaurant.infrastructure.database.entity.IngredientItemEntity;
 import org.springframework.boot.jackson.JsonComponent;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonComponent
-public class IngredientItemListDeserializer extends JsonDeserializer<List<IngredientItem>> {
+public class IngredientItemListDeserializer extends JsonDeserializer<List<IngredientItemEntity>> {
     @Override
-    public List<IngredientItem> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        List<IngredientItem> ingredientItems = new ArrayList<>();
+    public List<IngredientItemEntity> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        List<IngredientItemEntity> ingredientItems = new ArrayList<>();
         ArrayNode arrayNode = p.getCodec().readTree(p);
 
         for (JsonNode node : arrayNode) {
@@ -24,7 +24,7 @@ public class IngredientItemListDeserializer extends JsonDeserializer<List<Ingred
                 continue;
             }
 
-            IngredientItem ingredientItem = new IngredientItem();
+            IngredientItemEntity ingredientItem = new IngredientItemEntity();
 
             if (node.has("id") && !node.get("id").isNull()) {
                 ingredientItem.setId(node.get("id").asLong());

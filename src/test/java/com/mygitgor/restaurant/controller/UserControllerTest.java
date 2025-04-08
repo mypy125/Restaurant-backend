@@ -1,7 +1,8 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.UserController;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,9 +26,9 @@ public class UserControllerTest {
 
     @Test
     public void testFindUserByJwtToken() throws Exception {
-        User user = new User();
+        UserEntity user = new UserEntity();
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
-        ResponseEntity<User>response = userController.findUserByJwtToken("dummy_jwt_token");
+        ResponseEntity<UserEntity>response = userController.findUserByJwtToken("dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(user, response.getBody());
     }

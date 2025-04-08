@@ -1,12 +1,12 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Cart;
-import com.mygitgor.restaurant.domain.CartItem;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.controller.DTOs.request.AddCartItemRequest;
-import com.mygitgor.restaurant.controller.DTOs.request.UpdateCartItemRequest;
-import com.mygitgor.restaurant.service.CartService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.CartController;
+import com.mygitgor.restaurant.infrastructure.database.entity.CartEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.CartItemEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.api.controller.DTOs.request.AddCartItemRequest;
+import com.mygitgor.restaurant.application.service.CartService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,9 +35,9 @@ public class CartControllerTest {
     @Test
     public void testAddItemToCart() throws Exception{
         AddCartItemRequest request = new AddCartItemRequest();
-        CartItem cartItem = new CartItem();
+        CartItemEntity cartItem = new CartItemEntity();
         when(cartService.addItemToCart(eq(request), anyString())).thenReturn(cartItem);
-        ResponseEntity<CartItem> response = cartController.addItemToCart(request, "dummy_jwt_token");
+        ResponseEntity<CartItemEntity> response = cartController.addItemToCart(request, "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cartItem, response.getBody());
     }
@@ -47,42 +47,42 @@ public class CartControllerTest {
 //        UpdateCartItemRequest request = new UpdateCartItemRequest();
 //        request.setId(1L);
 //        request.setQuantity(2);
-//        CartItem cartItem = new CartItem();
+//        CartItemEntity cartItem = new CartItemEntity();
 //        when(cartService.updateCartItemQuantity(eq(1L), eq(2))).thenReturn(cartItem);
-//        ResponseEntity<CartItem> response = cartController.updateCartItemQuantity(request, "dummy_jwt_token");
+//        ResponseEntity<CartItemEntity> response = cartController.updateCartItemQuantity(request, "dummy_jwt_token");
 //        assertEquals(HttpStatus.OK, response.getStatusCode());
 //        assertEquals(cartItem, response.getBody());
 //    }
 
     @Test
     public void testRemoveCartItem() throws Exception{
-        Cart cart = new Cart();
+        CartEntity cart = new CartEntity();
         when(cartService.removeItemFromCart(eq(1L), anyString())).thenReturn(cart);
-        ResponseEntity<Cart> response = cartController.removeCartItem(1L, "dummy_jwt_token");
+        ResponseEntity<CartEntity> response = cartController.removeCartItem(1L, "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cart, response.getBody());
     }
 
     @Test
     public void testClearCart() throws Exception{
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
-        Cart cart = new Cart();
+        CartEntity cart = new CartEntity();
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(cartService.clearCart(eq(1L))).thenReturn(cart);
-        ResponseEntity<Cart> response = cartController.clearCart("dummy_jwt_token");
+        ResponseEntity<CartEntity> response = cartController.clearCart("dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cart, response.getBody());
     }
 
     @Test
     public void testFindUserCart() throws Exception{
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
-        Cart cart = new Cart();
+        CartEntity cart = new CartEntity();
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(cartService.findCartByUserId(eq(1L))).thenReturn(cart);
-        ResponseEntity<Cart> response = cartController.findUserCart("dummy_jwt_token");
+        ResponseEntity<CartEntity> response = cartController.findUserCart("dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(cart, response.getBody());
     }

@@ -1,13 +1,14 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Food;
-import com.mygitgor.restaurant.domain.Restaurant;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.controller.DTOs.request.CreateFoodRequest;
-import com.mygitgor.restaurant.controller.DTOs.response.MessageResponse;
-import com.mygitgor.restaurant.service.FoodService;
-import com.mygitgor.restaurant.service.RestaurantService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.AdminFoodController;
+import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.api.controller.DTOs.request.CreateFoodRequest;
+import com.mygitgor.restaurant.api.controller.DTOs.response.MessageResponse;
+import com.mygitgor.restaurant.application.service.FoodService;
+import com.mygitgor.restaurant.application.service.RestaurantService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,19 +46,19 @@ public class AdminFoodControllerTest {
     public void testCreateFood() throws Exception {
         CreateFoodRequest request = new CreateFoodRequest();
         request.setRestaurantId(1L);
-        Food food = new Food();
-        when(userService.findUserByJwtToken(anyString())).thenReturn(new User());
-        when(restaurantService.findRestaurantById(anyLong())).thenReturn(new Restaurant());
+        FoodEntity food = new FoodEntity();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(new UserEntity());
+        when(restaurantService.findRestaurantById(anyLong())).thenReturn(new RestaurantEntity());
         when(foodService.createFood(any(), any(), any())).thenReturn(food);
-        ResponseEntity<Food> response = adminFoodController.createFood(request, "dummy_jwt_token");
+        ResponseEntity<FoodEntity> response = adminFoodController.createFood(request, "dummy_jwt_token");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(food, response.getBody());
     }
 
     @Test
     public void testDeleteFood() throws Exception {
-        when(userService.findUserByJwtToken(anyString())).thenReturn(new User());
-        when(foodService.findFoodById(anyLong())).thenReturn(new Food());
+        when(userService.findUserByJwtToken(anyString())).thenReturn(new UserEntity());
+        when(foodService.findFoodById(anyLong())).thenReturn(new FoodEntity());
         ResponseEntity<MessageResponse> response = adminFoodController.deleteFood(1L, "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("food deleted successfully", response.getBody().getMessage());
@@ -65,10 +66,10 @@ public class AdminFoodControllerTest {
 
     @Test
     public void testUpdateFoodAvailabilityStatus() throws Exception {
-        Food food = new Food();
-        when(userService.findUserByJwtToken(anyString())).thenReturn(new User());
+        FoodEntity food = new FoodEntity();
+        when(userService.findUserByJwtToken(anyString())).thenReturn(new UserEntity());
         when(foodService.updateAvailabilityStatus(anyLong())).thenReturn(food);
-        ResponseEntity<Food> response = adminFoodController.updateFoodAvailabilityStatus(1L, "dummy_jwt_token");
+        ResponseEntity<FoodEntity> response = adminFoodController.updateFoodAvailabilityStatus(1L, "dummy_jwt_token");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(food, response.getBody());
     }

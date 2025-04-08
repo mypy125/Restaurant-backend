@@ -1,10 +1,11 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.domain.Food;
-import com.mygitgor.restaurant.service.FoodService;
-import com.mygitgor.restaurant.service.RestaurantService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.FoodController;
+import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.application.service.FoodService;
+import com.mygitgor.restaurant.application.service.RestaurantService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,20 +38,20 @@ public class FoodControllerTest {
         String foodName = "Sushi";
         String jwt = "dummy_jwt_token";
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Food food1 = new Food();
+        FoodEntity food1 = new FoodEntity();
         food1.setName("Sushi");
-        Food food2 = new Food();
+        FoodEntity food2 = new FoodEntity();
         food2.setName("Sushi Roll");
 
-        List<Food> foods = Arrays.asList(food1, food2);
+        List<FoodEntity> foods = Arrays.asList(food1, food2);
 
         when(userService.findUserByJwtToken(jwt)).thenReturn(user);
         when(foodService.searchFood(foodName)).thenReturn(foods);
 
-        ResponseEntity<List<Food>> response = foodController.searchFood(foodName, jwt);
+        ResponseEntity<List<FoodEntity>> response = foodController.searchFood(foodName, jwt);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(foods, response.getBody());
     }
@@ -64,19 +65,19 @@ public class FoodControllerTest {
         String foodCategory = "Starter";
         String jwt = "dummy_jwt_token";
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Food food1 = new Food();
+        FoodEntity food1 = new FoodEntity();
         food1.setName("Vegetarian Starter");
-        Food food2 = new Food();
+        FoodEntity food2 = new FoodEntity();
         food2.setName("Seasonal Salad");
-        List<Food> foods = Arrays.asList(food1, food2);
+        List<FoodEntity> foods = Arrays.asList(food1, food2);
 
         when(userService.findUserByJwtToken(jwt)).thenReturn(user);
         when(foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, foodCategory)).thenReturn(foods);
 
-        ResponseEntity<List<Food>> response = foodController.getRestaurantFood(vegetarian, seasonal, nonVeg, foodCategory, restaurantId, jwt);
+        ResponseEntity<List<FoodEntity>> response = foodController.getRestaurantFood(vegetarian, seasonal, nonVeg, foodCategory, restaurantId, jwt);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(foods, response.getBody());

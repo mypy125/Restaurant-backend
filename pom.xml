@@ -23,6 +23,7 @@
 		<com-stripe.version>25.9.0</com-stripe.version>
 		<modelmapper.verssion>3.1.0</modelmapper.verssion>
 		<spring-dotenv.version>3.0.0</spring-dotenv.version>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -61,6 +62,8 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgres.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -82,6 +85,25 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
+			<version>0.2.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

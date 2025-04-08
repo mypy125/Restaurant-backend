@@ -1,10 +1,11 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Restaurant;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.dto.RestaurantDto;
-import com.mygitgor.restaurant.service.RestaurantService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.RestaurantController;
+import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.api.controller.DTOs.RestaurantDto;
+import com.mygitgor.restaurant.application.service.RestaurantService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -37,20 +38,20 @@ public class RestaurantControllerTest {
     public void testSearchRestaurant()throws Exception{
         String keyword = "Sushi";
         String jwt = "dummy_jwt_token";
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Restaurant restaurant1 = new Restaurant();
+        RestaurantEntity restaurant1 = new RestaurantEntity();
         restaurant1.setName("Sushi Place");
-        Restaurant restaurant2 = new Restaurant();
+        RestaurantEntity restaurant2 = new RestaurantEntity();
         restaurant2.setName("Sushi World");
 
-        List<Restaurant>restaurants = Arrays.asList(restaurant1, restaurant2);
+        List<RestaurantEntity>restaurants = Arrays.asList(restaurant1, restaurant2);
 
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(restaurantService.searchRestaurant(keyword)).thenReturn(restaurants);
 
-        ResponseEntity<List<Restaurant>> response = restaurantController.searchRestaurant(jwt, keyword);
+        ResponseEntity<List<RestaurantEntity>> response = restaurantController.searchRestaurant(jwt, keyword);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(restaurants, response.getBody());
@@ -59,20 +60,20 @@ public class RestaurantControllerTest {
     @Test
     public void testGetAllRestaurant() throws Exception{
         String jwt = "dummy_jwt_token";
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Restaurant restaurant1 = new Restaurant();
+        RestaurantEntity restaurant1 = new RestaurantEntity();
         restaurant1.setName("Sushi Place");
-        Restaurant restaurant2 = new Restaurant();
+        RestaurantEntity restaurant2 = new RestaurantEntity();
         restaurant2.setName("Sushi World");
 
-        List<Restaurant> restaurants = Arrays.asList(restaurant1, restaurant2);
+        List<RestaurantEntity> restaurants = Arrays.asList(restaurant1, restaurant2);
 
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(restaurantService.getAllRestaurant()).thenReturn(restaurants);
 
-        ResponseEntity<List<Restaurant>> response = restaurantController.getAllRestaurant(jwt);
+        ResponseEntity<List<RestaurantEntity>> response = restaurantController.getAllRestaurant(jwt);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(restaurants, response.getBody());
@@ -83,17 +84,17 @@ public class RestaurantControllerTest {
         String jwt = "dummy_jwt_token";
         Long restaurantId = 1L;
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Restaurant restaurant = new Restaurant();
+        RestaurantEntity restaurant = new RestaurantEntity();
         restaurant.setId(restaurantId);
         restaurant.setName("Sushi World");
 
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(restaurantService.findRestaurantById(restaurantId)).thenReturn(restaurant);
 
-        ResponseEntity<Restaurant>response = restaurantController.findRestaurantById(jwt, restaurantId);
+        ResponseEntity<RestaurantEntity>response = restaurantController.findRestaurantById(jwt, restaurantId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(restaurant, response.getBody());
@@ -104,7 +105,7 @@ public class RestaurantControllerTest {
         String jwt = "dummy_jwt_token";
         Long restaurantId = 1L;
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
         RestaurantDto restaurantDto = new RestaurantDto();

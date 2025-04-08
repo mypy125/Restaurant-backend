@@ -1,0 +1,48 @@
+package com.mygitgor.restaurant.api.controller;
+
+import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.application.service.CategoryService;
+import com.mygitgor.restaurant.application.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * CategoryController управляет операциями, связанными с категориями ресторанов.
+ */
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class CategoryController {
+    private final CategoryService categoryService;
+    private final UserService userService;
+
+    @SneakyThrows
+    @PostMapping("/admin/category")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<CategoryEntity> createCategory(@RequestBody CategoryEntity category,
+                                                         @RequestHeader("Authorization") String jwt){
+        UserEntity user = userService.findUserByJwtToken(jwt);
+
+        CategoryEntity createCategory = categoryService.createCategory(category.getName(), user.getId());
+
+        return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
+    }
+
+    @SneakyThrows
+    @GetMapping("/category/restaurant/{id}")
+    public ResponseEntity<List<CategoryEntity>> getRestaurantCategory(@PathVariable Long id,
+                                                                      @RequestHeader("Authorization") String jwt){
+        UserEntity user = userService.findUserByJwtToken(jwt);
+
+        List<CategoryEntity> getCategoryByRestaurantId = categoryService.findCategoryByRestaurantId(id);
+
+        return new ResponseEntity<>(getCategoryByRestaurantId, HttpStatus.CREATED);
+    }
+
+}

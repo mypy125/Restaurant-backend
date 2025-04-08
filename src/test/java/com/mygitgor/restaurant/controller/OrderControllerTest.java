@@ -1,26 +1,15 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Order;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.controller.DTOs.request.OrderRequest;
-import com.mygitgor.restaurant.controller.DTOs.response.PaymentResponse;
-import com.mygitgor.restaurant.service.OrderService;
-import com.mygitgor.restaurant.service.PaymentService;
-import com.mygitgor.restaurant.service.UserService;
-import org.junit.jupiter.api.Test;
+import com.mygitgor.restaurant.api.controller.OrderController;
+import com.mygitgor.restaurant.application.service.OrderService;
+import com.mygitgor.restaurant.application.service.PaymentService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,17 +29,17 @@ public class OrderControllerTest {
 //        OrderRequest request = new OrderRequest();
 //        String jwt = "dummy_jwt_token";
 //
-//        User user = new User();
+//        UserEntity user = new UserEntity();
 //        user.setId(1L);
 //
-//        Order order = new Order();
+//        OrderEntity order = new OrderEntity();
 //        order.setId(1L);
 //
 //        PaymentResponse paymentResponse = new PaymentResponse();
 //
 //        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
-//        when(orderService.createOrder(any(OrderRequest.class), any(User.class))).thenReturn(order);
-//        when(paymentService.createStripePaymentLink(any(Order.class))).thenReturn(paymentResponse);
+//        when(orderService.createOrder(any(OrderRequest.class), any(UserEntity.class))).thenReturn(order);
+//        when(paymentService.createStripePaymentLink(any(OrderEntity.class))).thenReturn(paymentResponse);
 //
 //        ResponseEntity<PaymentResponse> response = orderController.createOrder(request,user);
 //
@@ -61,21 +50,21 @@ public class OrderControllerTest {
 //    @Test
 //    public void testGetOrderHistory()throws Exception{
 //        String jwt = "dummy_jwt_token";
-//        User user = new User();
+//        UserEntity user = new UserEntity();
 //        user.setId(1L);
 //
-//        Order order1 = new Order();
+//        OrderEntity order1 = new OrderEntity();
 //        order1.setId(1L);
 //
-//        Order order2 = new Order();
+//        OrderEntity order2 = new OrderEntity();
 //        order2.setId(2L);
 //
-//        List<Order> orders = Arrays.asList(order1, order2);
+//        List<OrderEntity> orders = Arrays.asList(order1, order2);
 //
 //        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
 //        when(orderService.getUsersOrder(anyLong())).thenReturn(orders);
 //
-//        ResponseEntity<List<Order>> response = orderController.getOrderHistory(jwt);
+//        ResponseEntity<List<OrderEntity>> response = orderController.getOrderHistory(jwt);
 //
 //        assertEquals(HttpStatus.OK, response.getStatusCode());
 //        assertEquals(orders, response.getBody());

@@ -1,9 +1,10 @@
 package com.mygitgor.restaurant.controller;
 
-import com.mygitgor.restaurant.domain.Category;
-import com.mygitgor.restaurant.domain.User;
-import com.mygitgor.restaurant.service.CategoryService;
-import com.mygitgor.restaurant.service.UserService;
+import com.mygitgor.restaurant.api.controller.CategoryController;
+import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
+import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.application.service.CategoryService;
+import com.mygitgor.restaurant.application.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,37 +34,37 @@ public class CategoryControllerTest {
 
     @Test
     public void testCreateCategory() throws Exception{
-        Category category = new Category();
+        CategoryEntity category = new CategoryEntity();
         category.setName("Sushi");
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setId(1L);
 
-        Category createdCategory = new Category();
+        CategoryEntity createdCategory = new CategoryEntity();
         createdCategory.setName("Sushi");
 
         when(userService.findUserByJwtToken(anyString())).thenReturn(user);
         when(categoryService.createCategory(eq("Sushi"), eq(1L))).thenReturn(createdCategory);
-        ResponseEntity<Category> response = categoryController.createCategory(category, "dummy_jwt_token");
+        ResponseEntity<CategoryEntity> response = categoryController.createCategory(category, "dummy_jwt_token");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(createdCategory, response.getBody());
     }
 
 //    @Test
 //    public void testGetRestaurantCategory() throws Exception{
-//        User user = new User();
+//        UserEntity user = new UserEntity();
 //        user.setId(1L);
 //
-//        Category category1 = new Category();
+//        CategoryEntity category1 = new CategoryEntity();
 //        category1.setName("Sushi");
-//        Category category2 = new Category();
+//        CategoryEntity category2 = new CategoryEntity();
 //        category2.setName("Pizza");
 //
-//        List<Category> categories = Arrays.asList(category1, category2);
+//        List<CategoryEntity> categories = Arrays.asList(category1, category2);
 //        when(userService.findUserByJwtToken(anyString())).thenReturn(user);
 //        when(categoryService.findCategoryByRestaurantId(eq(1L))).thenReturn(categories);
 //
-//        ResponseEntity<List<Category>> response = categoryController.getRestaurantCategory("dummy_jwt_token");
+//        ResponseEntity<List<CategoryEntity>> response = categoryController.getRestaurantCategory("dummy_jwt_token");
 //
 //        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 //        assertEquals(categories, response.getBody());
