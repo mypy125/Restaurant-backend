@@ -3,6 +3,7 @@ package com.mygitgor.restaurant.api.controller;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.api.controller.DTOs.UserProfileDto;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,9 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:3000")
     @SneakyThrows
     @GetMapping("/profile")
-    public ResponseEntity<UserEntity> findUserByJwtToken(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<User> findUserByJwtToken(@RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

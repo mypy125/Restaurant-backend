@@ -3,6 +3,8 @@ package com.mygitgor.restaurant.application.impl;
 import com.mygitgor.restaurant.infrastructure.sequrity.JwtProvider;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.api.controller.DTOs.UserProfileDto;
+import com.mygitgor.restaurant.mapper.UserProfileDtoMapper;
+import com.mygitgor.restaurant.model.domain.User;
 import com.mygitgor.restaurant.model.repository.UserRepository;
 import com.mygitgor.restaurant.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+    private final UserProfileDtoMapper profileDtoMapper;
 
     /**
      *  метод используется для поиска пользователя по JWT токену. Он принимает JWT токен в качестве аргумента,
@@ -29,7 +32,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public UserEntity findUserByJwtToken(String jwt) throws Exception {
+    public User findUserByJwtToken(String jwt) throws Exception {
         String email = jwtProvider.getEmailFromJwtToken(jwt);
         return findUserByEmail(email);
     }
@@ -44,8 +47,8 @@ public class UserServiceImpl implements UserService {
      * @throws Exception бросает исключения UsernameNotFoundException
      */
     @Override
-    public UserEntity findUserByEmail(String email) throws Exception{
-        UserEntity user = userRepository.findByEmail(email);
+    public User findUserByEmail(String email) throws Exception{
+        User user = userRepository.findByEmail(email);
         if(user == null){
             throw new UsernameNotFoundException("user not found");
         }
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserProfile(UserProfileDto userProfileDto, String jwt) throws Exception {
         String email = jwtProvider.getEmailFromJwtToken(jwt);
-        UserEntity user = findUserByEmail(email);
+        User user = findUserByEmail(email);
 
         if (userProfileDto.getFullName() != null) {
             user.setFullName(userProfileDto.getFullName());
@@ -65,6 +68,8 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
     }
+
+
 
 
 }

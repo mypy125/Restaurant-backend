@@ -1,7 +1,7 @@
 package com.mygitgor.restaurant.api.controller.DTOs.request;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.mygitgor.restaurant.convertor.IngredientItemListStringDeserializer;
+import com.mygitgor.restaurant.api.convertor.IngredientItemListStringDeserializer;
 import lombok.Data;
 
 import java.util.List;

@@ -1,5 +1,8 @@
 package com.mygitgor.restaurant.model.repository;
 
-public interface UserRepository  {
+import com.mygitgor.restaurant.model.domain.User;
 
+public interface UserRepository  {
+    User findByEmail(String email);
+    User save(User user);
 }
