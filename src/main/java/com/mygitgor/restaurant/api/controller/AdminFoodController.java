@@ -8,6 +8,7 @@ import com.mygitgor.restaurant.api.controller.DTOs.response.MessageResponse;
 import com.mygitgor.restaurant.application.service.FoodService;
 import com.mygitgor.restaurant.application.service.RestaurantService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class AdminFoodController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FoodEntity> createFood(@RequestBody CreateFoodRequest request,
                                                  @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         RestaurantEntity restaurant = restaurantService.findRestaurantByUserId(user.getId());
         FoodEntity food = foodService.createFood(request, request.getCategory(), restaurant);
 
@@ -41,7 +42,7 @@ public class AdminFoodController {
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteFood(@PathVariable Long id,
                                            @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         foodService.deleteFood(id);
 
         MessageResponse msg = new MessageResponse();
@@ -54,7 +55,7 @@ public class AdminFoodController {
     @PutMapping("/{id}")
     public ResponseEntity<FoodEntity> updateFoodAvailabilityStatus(@PathVariable Long id,
                                                                    @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         FoodEntity food = foodService.updateAvailabilityStatus(id);
 
         return new ResponseEntity<>(food, HttpStatus.OK);

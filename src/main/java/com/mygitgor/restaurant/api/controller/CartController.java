@@ -8,6 +8,9 @@ import com.mygitgor.restaurant.api.controller.DTOs.request.AddCartItemRequest;
 import com.mygitgor.restaurant.api.controller.DTOs.request.UpdateCartItemRequest;
 import com.mygitgor.restaurant.application.service.CartService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.Cart;
+import com.mygitgor.restaurant.model.domain.CartItem;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -26,47 +29,47 @@ public class CartController {
 
     @SneakyThrows
     @PutMapping("/cart/add")
-    public ResponseEntity<CartItemEntity> addItemToCart(@RequestBody AddCartItemRequest request,
+    public ResponseEntity<CartItem> addItemToCart(@RequestBody AddCartItemRequest request,
                                                         @RequestHeader("Authorization") String jwt){
-        CartItemEntity cartItem = cartService.addItemToCart(request, jwt);
+        CartItem cartItem = cartService.addItemToCart(request, jwt);
         return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
     @SneakyThrows
     @PutMapping("/cart-item/update")
-    public ResponseEntity<CartItemEntity> updateCartItemQuantity(@RequestBody UpdateCartItemRequest request,
+    public ResponseEntity<CartItem> updateCartItemQuantity(@RequestBody UpdateCartItemRequest request,
                                                                  @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         if (user == null) {
             throw new UserNotFoundException("UserEntity not found");
         }
-        CartItemEntity cartItem = cartService.updateCartItemQuantity(request.getId(), request.getQuantity());
+        CartItem cartItem = cartService.updateCartItemQuantity(request.getId(), request.getQuantity());
         return new ResponseEntity<>(cartItem, HttpStatus.OK);
     }
 
     @SneakyThrows
     @DeleteMapping("/cart-item/{id}/remove")
-    public ResponseEntity<CartEntity> removeCartItem(@PathVariable Long id,
-                                                     @RequestHeader("Authorization") String jwt){
-        CartEntity cart = cartService.removeItemFromCart(id, jwt);
+    public ResponseEntity<Cart> removeCartItem(@PathVariable Long id,
+                                               @RequestHeader("Authorization") String jwt){
+        Cart cart = cartService.removeItemFromCart(id, jwt);
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @SneakyThrows
     @PutMapping("/cart/clear")
-    public ResponseEntity<CartEntity> clearCart(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<Cart> clearCart(@RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
-        CartEntity cart = cartService.clearCart(user.getId());
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.clearCart(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/cart")
-    public ResponseEntity<CartEntity> findUserCart(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<Cart> findUserCart(@RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
-        CartEntity cart = cartService.findCartByUserId(user.getId());
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.findCartByUserId(user.getId());
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 

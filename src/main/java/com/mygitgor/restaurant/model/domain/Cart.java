@@ -1,6 +1,5 @@
 package com.mygitgor.restaurant.model.domain;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.CartItemEntity;
 import lombok.*;
 
 import java.util.List;
@@ -12,6 +11,6 @@ import java.util.List;
 public class Cart extends BaseModelId{
     private Long customerId;
     private Long total;
-    private List<CartItemEntity> items;
+    private List<CartItem> items;
 }
 

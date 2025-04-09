@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.infrastructure.sequrity.JwtProvider;
 import com.mygitgor.restaurant.infrastructure.database.entity.CartEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.Role;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.model.domain.User;
 import com.mygitgor.restaurant.model.repository.CartRepository;
 import com.mygitgor.restaurant.model.repository.UserRepository;
 import com.mygitgor.restaurant.api.controller.DTOs.request.LoginRequest;
@@ -50,16 +51,16 @@ public class AuthController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody RegisterRequest request) throws Exception {
-        UserEntity isEmailExist = userRepository.findByEmail(request.getEmail());
+        User isEmailExist = userRepository.findByEmail(request.getEmail());
         if(isEmailExist != null){
             throw new Exception("Email is already used with another account..");
         }
-        UserEntity createUser = new UserEntity();
+        User createUser = new User();
         createUser.setEmail(request.getEmail());
         createUser.setFullName(request.getFullName());
         createUser.setRole(Role.valueOf(request.getRole()));
         createUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        UserEntity saveUser = userRepository.save(createUser);
+        User saveUser = userRepository.save(createUser);
 
         CartEntity cart = new CartEntity();
         cart.setCustomer(saveUser);

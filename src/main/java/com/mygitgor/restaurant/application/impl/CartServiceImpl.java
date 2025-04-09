@@ -1,10 +1,10 @@
 package com.mygitgor.restaurant.application.impl;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.CartEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.CartItemEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.api.exceprion.cartexception.CartItemNotFoundException;
+import com.mygitgor.restaurant.model.domain.Cart;
+import com.mygitgor.restaurant.model.domain.CartItem;
+import com.mygitgor.restaurant.model.domain.Food;
+import com.mygitgor.restaurant.model.domain.User;
 import com.mygitgor.restaurant.model.repository.CartItemRepository;
 import com.mygitgor.restaurant.model.repository.CartRepository;
 import com.mygitgor.restaurant.api.controller.DTOs.request.AddCartItemRequest;
@@ -14,10 +14,8 @@ import com.mygitgor.restaurant.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 /**
- * CartEntity Service: Этот сервиз связаны с  корзиной покупок.
+ * CartService: Этот сервиз связаны с  корзиной покупок.
  */
 @Service
 @RequiredArgsConstructor
@@ -35,28 +33,26 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartItemEntity addItemToCart(AddCartItemRequest request, String jwt) throws Exception {
-        UserEntity user = userService.findUserByJwtToken(jwt);
-        FoodEntity food = foodService.findFoodById(request.getFoodId());
-        CartEntity cart = cartRepository.findByCustomerId(user.getId());
+    public CartItem addItemToCart(AddCartItemRequest request, String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        Food food = foodService.findFoodById(request.getFoodId());
+        Cart cart = cartRepository.findByCustomerId(user.getId());
 
-        for(CartItemEntity cartItem : cart.getItem()){
-            if(cartItem.getFood().equals(food)){
+        for (CartItem cartItem : cart.getItems()) {
+            if (cartItem.getFoodId().equals(food.getId())) {
                 int quantity = cartItem.getQuantity() + request.getQuantity();
                 return updateCartItemQuantity(cartItem.getId(), quantity);
             }
         }
 
-        CartItemEntity newCartItem = new CartItemEntity();
-        newCartItem.setFood(food);
-        newCartItem.setCart(cart);
+        CartItem newCartItem = new CartItem();
+        newCartItem.setFoodId(food.getId());
+        newCartItem.setCartId(cart.getId());
         newCartItem.setQuantity(request.getQuantity());
         newCartItem.setIngredients(request.getIngredients());
         newCartItem.setTotalPrice(request.getQuantity() * food.getPrice());
-        CartItemEntity saveCartItem = cartItemRepository.save(newCartItem);
 
-        cart.getItem().add(saveCartItem);
-        return saveCartItem;
+        return cartItemRepository.save(newCartItem);
     }
 
     /**
@@ -67,39 +63,33 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartItemEntity updateCartItemQuantity(Long cartItemId, int quantity)throws CartItemNotFoundException{
-        CartItemEntity cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new CartItemNotFoundException("CartEntity item not found"));
+    public CartItem updateCartItemQuantity(Long cartItemId, int quantity)throws CartItemNotFoundException{
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new CartItemNotFoundException("Cart item not found"));
 
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than zero");
         }
 
         cartItem.setQuantity(quantity);
-        cartItem.setTotalPrice(cartItem.getFood().getPrice() * quantity);
-
+        cartItem.setTotalPrice(cartItem.getTotalPrice() / cartItem.getQuantity() * quantity);
         return cartItemRepository.save(cartItem);
     }
 
     /**
      * метод предназначен для удаления элемента из корзины пользователя.
-     * @param id идентификатор карзины
+     * @param itemId идентификатор карзины
      * @param jwt токен пользователя
      * @return  возврашает карзину
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartEntity removeItemFromCart(Long id, String jwt) throws Exception {
-        UserEntity user = userService.findUserByJwtToken(jwt);
-        CartEntity cart = cartRepository.findByCustomerId(user.getId());
+    public Cart removeItemFromCart(Long itemId, String jwt) throws Exception {
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartRepository.findByCustomerId(user.getId());
 
-        Optional<CartItemEntity> cartItemOptional = cartItemRepository.findById(id);
-        if(cartItemOptional.isEmpty()){
-            throw new Exception("cart item not found");
-        }
-
-        CartItemEntity cartItem = cartItemOptional.get();
-        cart.getItem().remove(cartItem);
+        boolean removed = cart.getItems().removeIf(item -> item.getId().equals(itemId));
+        if (!removed) throw new Exception("Cart item not found");
 
         return cartRepository.save(cart);
     }
@@ -111,13 +101,10 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public Long calculateCartTotals(CartEntity cart) throws Exception {
-        Long total = 0L;
-
-        for(CartItemEntity cartItem : cart.getItem()){
-            total += cartItem.getFood().getPrice() * cartItem.getQuantity();
-        }
-        return total;
+    public Long calculateCartTotals(Cart cart) throws Exception {
+        return cart.getItems().stream()
+                .mapToLong(CartItem::getTotalPrice)
+                .sum();
     }
 
     /**
@@ -127,13 +114,9 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartEntity findCartById(Long id) throws Exception {
-        Optional<CartEntity> cartOptional = cartRepository.findById(id);
-
-        if(cartOptional.isEmpty()){
-            throw new Exception("cart item not found wit id");
-        }
-        return cartOptional.get();
+    public Cart findCartById(Long id) throws Exception {
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new Exception("Cart not found with id " + id));
     }
 
     /**
@@ -143,8 +126,8 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartEntity findCartByUserId(Long userId) throws Exception {
-        CartEntity cart = cartRepository.findByCustomerId(userId);
+    public Cart findCartByUserId(Long userId) throws Exception {
+        Cart cart = cartRepository.findByCustomerId(userId);
         cart.setTotal(calculateCartTotals(cart));
         return cart;
     }
@@ -156,10 +139,9 @@ public class CartServiceImpl implements CartService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CartEntity clearCart(Long userId) throws Exception {
-        CartEntity cart = findCartByUserId(userId);
-
-        cart.getItem().clear();
+    public Cart clearCart(Long userId) throws Exception {
+        Cart cart = findCartByUserId(userId);
+        cart.getItems().clear();
         return cartRepository.save(cart);
     }
 }

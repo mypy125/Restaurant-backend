@@ -6,6 +6,7 @@ import com.mygitgor.restaurant.api.controller.DTOs.request.CreateRestaurantReque
 import com.mygitgor.restaurant.api.controller.DTOs.response.MessageResponse;
 import com.mygitgor.restaurant.application.service.RestaurantService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class AdminRestaurantController {
     @PostMapping()
     public ResponseEntity<RestaurantEntity> createRestaurant(@RequestBody CreateRestaurantRequest request,
                                                              @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         try {
             RestaurantEntity restaurant = restaurantService.createRestaurant(request, user);
@@ -44,7 +45,7 @@ public class AdminRestaurantController {
     public ResponseEntity<RestaurantEntity> updateRestaurant(@RequestBody CreateRestaurantRequest request,
                                                              @RequestHeader("Authorization") String jwt,
                                                              @PathVariable Long id){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         RestaurantEntity restaurant = restaurantService.updateRestaurant(id, request);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
@@ -54,7 +55,7 @@ public class AdminRestaurantController {
     @SneakyThrows
     public ResponseEntity<MessageResponse> deleteRestaurant(@RequestHeader("Authorization") String jwt,
                                                             @PathVariable Long id){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         MessageResponse response = new MessageResponse();
         response.setMassage("RestaurantEntity deleted success!");
@@ -68,7 +69,7 @@ public class AdminRestaurantController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<RestaurantEntity> updateRestaurantStatus(@RequestHeader("Authorization") String jwt,
                                                                    @PathVariable Long id){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         RestaurantEntity restaurant = restaurantService.updateRestaurantStatus(id);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
@@ -78,7 +79,7 @@ public class AdminRestaurantController {
     @SneakyThrows
     public ResponseEntity<RestaurantEntity> findRestaurantByUserId(@RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         RestaurantEntity restaurant = restaurantService.findRestaurantByUserId(user.getId());
         return new ResponseEntity<>(restaurant, HttpStatus.OK);

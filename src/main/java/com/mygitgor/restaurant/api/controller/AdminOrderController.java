@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.infrastructure.database.entity.OrderEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.application.service.OrderService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class AdminOrderController {
                                                              @RequestParam(required = false) String order_status,
                                                              @RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         List<OrderEntity> order = orderService.getRestaurantsOrder(id, order_status);
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -40,7 +41,7 @@ public class AdminOrderController {
                                                          @PathVariable String orderStatus,
                                                          @RequestHeader("Authorization") String jwt){
 
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         OrderEntity order = orderService.updateOrder(id, orderStatus);
         return new ResponseEntity<>(order, HttpStatus.OK);

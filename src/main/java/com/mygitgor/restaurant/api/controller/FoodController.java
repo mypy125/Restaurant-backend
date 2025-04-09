@@ -5,6 +5,7 @@ import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.application.service.FoodService;
 import com.mygitgor.restaurant.application.service.RestaurantService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,10 @@ public class FoodController {
     @SneakyThrows
     @GetMapping("/search")
     public ResponseEntity<List<FoodEntity>> searchFood(@RequestParam String name,
-                                                       @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
-
+                                                       @RequestHeader("Authorization") String jwt)
+    {
+        User user = userService.findUserByJwtToken(jwt);
         List<FoodEntity> foods = foodService.searchFood(name);
-
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
@@ -48,7 +48,7 @@ public class FoodController {
         if (restaurantId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
         List<FoodEntity> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, food_category);
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }

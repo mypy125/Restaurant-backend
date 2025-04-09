@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.application.service.CategoryService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class CategoryController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<CategoryEntity> createCategory(@RequestBody CategoryEntity category,
                                                          @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         CategoryEntity createCategory = categoryService.createCategory(category.getName(), user.getId());
 
@@ -38,7 +39,7 @@ public class CategoryController {
     @GetMapping("/category/restaurant/{id}")
     public ResponseEntity<List<CategoryEntity>> getRestaurantCategory(@PathVariable Long id,
                                                                       @RequestHeader("Authorization") String jwt){
-        UserEntity user = userService.findUserByJwtToken(jwt);
+        User user = userService.findUserByJwtToken(jwt);
 
         List<CategoryEntity> getCategoryByRestaurantId = categoryService.findCategoryByRestaurantId(id);
 
