@@ -4,6 +4,9 @@ import com.mygitgor.restaurant.infrastructure.database.entity.AddressEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.api.controller.DTOs.RestaurantDto;
+import com.mygitgor.restaurant.model.domain.Address;
+import com.mygitgor.restaurant.model.domain.Restaurant;
+import com.mygitgor.restaurant.model.domain.User;
 import com.mygitgor.restaurant.model.repository.RestaurantRepository;
 import com.mygitgor.restaurant.model.repository.UserRepository;
 import com.mygitgor.restaurant.api.controller.DTOs.request.CreateRestaurantRequest;
@@ -34,15 +37,16 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @return возврошает созданный ресторан
      */
     @Override
-    public RestaurantEntity createRestaurant(CreateRestaurantRequest request, UserEntity user) {
-        Optional<RestaurantEntity> existingRestaurant = restaurantRepository.findByOwnerId(user.getId());
+    public Restaurant createRestaurant(CreateRestaurantRequest request, User user) {
+        Optional<Restaurant> existingRestaurant = restaurantRepository.findByOwnerId(user.getId());
         if (existingRestaurant.isPresent()) {
             throw new RuntimeException("A restaurant already exists for this owner.");
         }
 
-        AddressEntity address = addressService.saveUserAddress(request.getAddress(), user);
+        Address address = addressService.saveUserAddress(request.getAddress(), user);
 
-        RestaurantEntity restaurant = new RestaurantEntity();
+        Restaurant restaurant = new Restaurant();
+        restaurant.setOwnerId(user.getId());
         restaurant.setAddress(address);
         restaurant.setContactInformation(request.getContactInformation());
         restaurant.setCuisineType(request.getCuisineType());
@@ -51,7 +55,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setName(request.getName());
         restaurant.setOpeningHours(request.getOpeningHours());
         restaurant.setRegistrationTime(LocalDateTime.now());
-        restaurant.setOwner(user);
+        restaurant.setOpen(true);
         return restaurantRepository.save(restaurant);
     }
 
@@ -64,17 +68,28 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public RestaurantEntity updateRestaurant(Long restaurantId, CreateRestaurantRequest updateRestaurant)throws Exception {
-        RestaurantEntity restaurant = findRestaurantById(restaurantId);
-        if(restaurant.getCuisineType() != null){
+    public Restaurant updateRestaurant(Long restaurantId, CreateRestaurantRequest updateRestaurant)throws Exception {
+        Restaurant restaurant = findRestaurantById(restaurantId);
+
+        if (updateRestaurant.getCuisineType() != null) {
             restaurant.setCuisineType(updateRestaurant.getCuisineType());
         }
-        if(restaurant.getDescription() != null){
+        if (updateRestaurant.getDescription() != null) {
             restaurant.setDescription(updateRestaurant.getDescription());
         }
-        if(restaurant.getName() != null){
+        if (updateRestaurant.getName() != null) {
             restaurant.setName(updateRestaurant.getName());
         }
+        if (updateRestaurant.getOpeningHours() != null) {
+            restaurant.setOpeningHours(updateRestaurant.getOpeningHours());
+        }
+        if (updateRestaurant.getContactInformation() != null) {
+            restaurant.setContactInformation(updateRestaurant.getContactInformation());
+        }
+        if (updateRestaurant.getImages() != null) {
+            restaurant.setImages(updateRestaurant.getImages());
+        }
+
         return restaurantRepository.save(restaurant);
     }
 
@@ -85,7 +100,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      */
     @Override
     public void deleteRestaurant(Long restaurantId)throws Exception {
-        RestaurantEntity restaurant = findRestaurantByUserId(restaurantId);
+        Restaurant restaurant = findRestaurantById(restaurantId);
         restaurantRepository.delete(restaurant);
     }
 
@@ -95,7 +110,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @return список ресторан
      */
     @Override
-    public List<RestaurantEntity> getAllRestaurant() {
+    public List<Restaurant> getAllRestaurant() {
         return restaurantRepository.findAll();
     }
 
@@ -106,7 +121,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @return список ресторан
      */
     @Override
-    public List<RestaurantEntity> searchRestaurant(String keyword) {
+    public List<Restaurant> searchRestaurant(String keyword) {
         return restaurantRepository.findBySearchQuery(keyword);
     }
 
@@ -118,7 +133,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public RestaurantEntity findRestaurantById(Long id) throws Exception {
+    public Restaurant findRestaurantById(Long id) throws Exception {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new Exception("RestaurantEntity not found with id " + id));
     }
@@ -132,7 +147,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public RestaurantEntity findRestaurantByUserId(Long id)throws Exception {
+    public Restaurant findRestaurantByUserId(Long id)throws Exception {
         return restaurantRepository.findByOwnerId(id)
                 .orElseThrow(() -> new Exception("RestaurantEntity not found with owner id " + id));
     }
@@ -150,34 +165,33 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public RestaurantDto addToFavorites(Long restaurantId, UserEntity user)throws Exception {
-        RestaurantEntity restaurant = findRestaurantById(restaurantId);
+    public RestaurantDto addToFavorites(Long restaurantId, User user)throws Exception {
+        Restaurant restaurant = findRestaurantById(restaurantId);
 
         RestaurantDto restaurantDto = new RestaurantDto();
+        restaurantDto.setId(restaurantId);
+        restaurantDto.setName(restaurant.getName());
+        restaurantDto.setTitle(restaurant.getName());
         restaurantDto.setDescription(restaurant.getDescription());
         restaurantDto.setImages(restaurant.getImages());
-        restaurantDto.setTitle(restaurant.getName());
-        restaurantDto.setId(restaurantId);
 
-        if(user.getFavorites().contains(restaurantDto)){
+        if (user.getFavorites().contains(restaurantDto)) {
             user.getFavorites().remove(restaurantDto);
+        } else {
+            user.getFavorites().add(restaurantDto);
         }
-        else user.getFavorites().add(restaurantDto);
 
         userRepository.save(user);
-
         return restaurantDto;
     }
 
     @Override
-    public void removeFromFavorites(Long restaurantId, UserEntity user) throws Exception {
-        RestaurantEntity restaurant = findRestaurantById(restaurantId);
-
-        if (user.getFavorites().stream().anyMatch(fav -> fav.getId().equals(restaurantId))) {
-            user.getFavorites().removeIf(fav -> fav.getId().equals(restaurantId));
+    public void removeFromFavorites(Long restaurantId, User user) throws Exception {
+        boolean removed = user.getFavorites().removeIf(fav -> fav.getId().equals(restaurantId));
+        if (removed) {
             userRepository.save(user);
         } else {
-            throw new Exception("RestaurantEntity not found in favorites");
+            throw new Exception("Restaurant not found in favorites");
         }
     }
 
@@ -193,8 +207,8 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public RestaurantEntity updateRestaurantStatus(Long id)throws Exception {
-        RestaurantEntity restaurant = findRestaurantById(id);
+    public Restaurant updateRestaurantStatus(Long id)throws Exception {
+        Restaurant restaurant = findRestaurantById(id);
         restaurant.setOpen(!restaurant.isOpen());
         return restaurantRepository.save(restaurant);
     }

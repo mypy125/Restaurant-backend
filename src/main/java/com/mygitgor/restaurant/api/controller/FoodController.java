@@ -5,6 +5,7 @@ import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.application.service.FoodService;
 import com.mygitgor.restaurant.application.service.RestaurantService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.Food;
 import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -27,17 +28,17 @@ public class FoodController {
 
     @SneakyThrows
     @GetMapping("/search")
-    public ResponseEntity<List<FoodEntity>> searchFood(@RequestParam String name,
+    public ResponseEntity<List<Food>> searchFood(@RequestParam String name,
                                                        @RequestHeader("Authorization") String jwt)
     {
         User user = userService.findUserByJwtToken(jwt);
-        List<FoodEntity> foods = foodService.searchFood(name);
+        List<Food> foods = foodService.searchFood(name);
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 
     @SneakyThrows
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<FoodEntity>> getRestaurantFood(
+    public ResponseEntity<List<Food>> getRestaurantFood(
             @RequestParam(defaultValue = "false") boolean vegetarian,
             @RequestParam(defaultValue = "false") boolean seasonal,
             @RequestParam(defaultValue = "false") boolean nonVeg,
@@ -49,7 +50,7 @@ public class FoodController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         User user = userService.findUserByJwtToken(jwt);
-        List<FoodEntity> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, food_category);
+        List<Food> foods = foodService.getRestaurantFood(restaurantId, vegetarian, nonVeg, seasonal, food_category);
         return new ResponseEntity<>(foods, HttpStatus.OK);
     }
 

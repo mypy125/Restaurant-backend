@@ -6,6 +6,7 @@ import com.mygitgor.restaurant.api.controller.DTOs.request.CreateRestaurantReque
 import com.mygitgor.restaurant.api.controller.DTOs.response.MessageResponse;
 import com.mygitgor.restaurant.application.service.RestaurantService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.Restaurant;
 import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -28,12 +29,12 @@ public class AdminRestaurantController {
     @PreAuthorize("hasAnyRole('OWNER', 'ADMIN')")
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping()
-    public ResponseEntity<RestaurantEntity> createRestaurant(@RequestBody CreateRestaurantRequest request,
+    public ResponseEntity<Restaurant> createRestaurant(@RequestBody CreateRestaurantRequest request,
                                                              @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
         try {
-            RestaurantEntity restaurant = restaurantService.createRestaurant(request, user);
+            Restaurant restaurant = restaurantService.createRestaurant(request, user);
             return new ResponseEntity<>(restaurant, HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -42,12 +43,12 @@ public class AdminRestaurantController {
 
     @PutMapping("/{id}")
     @SneakyThrows
-    public ResponseEntity<RestaurantEntity> updateRestaurant(@RequestBody CreateRestaurantRequest request,
+    public ResponseEntity<Restaurant> updateRestaurant(@RequestBody CreateRestaurantRequest request,
                                                              @RequestHeader("Authorization") String jwt,
                                                              @PathVariable Long id){
         User user = userService.findUserByJwtToken(jwt);
 
-        RestaurantEntity restaurant = restaurantService.updateRestaurant(id, request);
+        Restaurant restaurant = restaurantService.updateRestaurant(id, request);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
@@ -67,21 +68,21 @@ public class AdminRestaurantController {
     @PutMapping("/{id}/status")
     @SneakyThrows
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<RestaurantEntity> updateRestaurantStatus(@RequestHeader("Authorization") String jwt,
+    public ResponseEntity<Restaurant> updateRestaurantStatus(@RequestHeader("Authorization") String jwt,
                                                                    @PathVariable Long id){
         User user = userService.findUserByJwtToken(jwt);
 
-        RestaurantEntity restaurant = restaurantService.updateRestaurantStatus(id);
+        Restaurant restaurant = restaurantService.updateRestaurantStatus(id);
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 
     @GetMapping("/user")
     @SneakyThrows
-    public ResponseEntity<RestaurantEntity> findRestaurantByUserId(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<Restaurant> findRestaurantByUserId(@RequestHeader("Authorization") String jwt){
 
         User user = userService.findUserByJwtToken(jwt);
 
-        RestaurantEntity restaurant = restaurantService.findRestaurantByUserId(user.getId());
+        Restaurant restaurant = restaurantService.findRestaurantByUserId(user.getId());
         return new ResponseEntity<>(restaurant, HttpStatus.OK);
     }
 }

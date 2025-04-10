@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.infrastructure.sequrity.JwtProvider;
 import com.mygitgor.restaurant.infrastructure.database.entity.CartEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.Role;
 import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
+import com.mygitgor.restaurant.model.domain.Cart;
 import com.mygitgor.restaurant.model.domain.User;
 import com.mygitgor.restaurant.model.repository.CartRepository;
 import com.mygitgor.restaurant.model.repository.UserRepository;
@@ -62,7 +63,7 @@ public class AuthController {
         createUser.setPassword(passwordEncoder.encode(request.getPassword()));
         User saveUser = userRepository.save(createUser);
 
-        CartEntity cart = new CartEntity();
+        Cart cart = new Cart();
         cart.setCustomer(saveUser);
         cartRepository.save(cart);
 

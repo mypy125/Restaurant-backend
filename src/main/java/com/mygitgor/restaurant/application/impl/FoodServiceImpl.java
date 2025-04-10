@@ -3,6 +3,9 @@ package com.mygitgor.restaurant.application.impl;
 import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
+import com.mygitgor.restaurant.model.domain.Category;
+import com.mygitgor.restaurant.model.domain.Food;
+import com.mygitgor.restaurant.model.domain.Restaurant;
 import com.mygitgor.restaurant.model.repository.FoodRepository;
 import com.mygitgor.restaurant.model.repository.RestaurantRepository;
 import com.mygitgor.restaurant.api.controller.DTOs.request.CreateFoodRequest;
@@ -35,8 +38,8 @@ public class FoodServiceImpl implements FoodService {
      */
     @Transactional
     @Override
-    public FoodEntity createFood(CreateFoodRequest request, CategoryEntity category, RestaurantEntity restaurant) {
-        FoodEntity food = new FoodEntity();
+    public Food createFood(CreateFoodRequest request, Category category, Restaurant restaurant) {
+        Food food = new Food();
         food.setFoodCategory(category);
         food.setRestaurant(restaurant);
         food.setDescription(request.getDescription());
@@ -65,7 +68,7 @@ public class FoodServiceImpl implements FoodService {
      */
     @Override
     public void deleteFood(Long foodId) throws Exception {
-        FoodEntity food = findFoodById(foodId);
+        Food food = findFoodById(foodId);
         food.setRestaurant(null);
         foodRepository.save(food);
     }
@@ -80,12 +83,12 @@ public class FoodServiceImpl implements FoodService {
      * @return возврошает список блюд
      */
     @Override
-    public List<FoodEntity> getRestaurantFood(Long restaurantId,
+    public List<Food> getRestaurantFood(Long restaurantId,
                                               boolean isVegetarian,
                                               boolean isNonveg,
                                               boolean isSeasonal,
                                               String foodCategory) {
-        List<FoodEntity> foods = foodRepository.findByRestaurantId(restaurantId);
+        List<Food> foods = foodRepository.findByRestaurantId(restaurantId);
         if(isVegetarian){
             foods = filterByVegetarian(foods, isVegetarian);
         }
@@ -107,7 +110,7 @@ public class FoodServiceImpl implements FoodService {
      * @param foodCategory нозвания категори
      * @return список блюд из котегори
      */
-    private List<FoodEntity> filterByCategory(List<FoodEntity> foods, String foodCategory) {
+    private List<Food> filterByCategory(List<Food> foods, String foodCategory) {
         return foods.stream().filter(food -> {
             if(food.getFoodCategory() != null){
                 return food.getFoodCategory().equals(foodCategory);
@@ -122,7 +125,7 @@ public class FoodServiceImpl implements FoodService {
      * @param isSeasonal сезон
      * @return возврошает список сезоннх блюд
      */
-    private List<FoodEntity> filterBySeasonal(List<FoodEntity> foods, boolean isSeasonal) {
+    private List<Food> filterBySeasonal(List<Food> foods, boolean isSeasonal) {
         return foods.stream().filter(food -> food.isSeasonal() == isSeasonal).collect(Collectors.toList());
 
     }
@@ -133,7 +136,7 @@ public class FoodServiceImpl implements FoodService {
      * @param isNonveg не вегетарианский
      * @return  возврошает список не вегетарианский блюд
      */
-    private List<FoodEntity> filterByNonveg(List<FoodEntity> foods, boolean isNonveg) {
+    private List<Food> filterByNonveg(List<Food> foods, boolean isNonveg) {
         return foods.stream().filter(food -> food.isVegetarian() == false).collect(Collectors.toList());
 
     }
@@ -144,7 +147,7 @@ public class FoodServiceImpl implements FoodService {
      * @param isVegetarian вегетарианский
      * @return возврошает список вегетарианский блюд
      */
-    private List<FoodEntity> filterByVegetarian(List<FoodEntity> foods, boolean isVegetarian) {
+    private List<Food> filterByVegetarian(List<Food> foods, boolean isVegetarian) {
         return foods.stream().filter(food -> food.isVegetarian() == isVegetarian).collect(Collectors.toList());
     }
 
@@ -157,7 +160,7 @@ public class FoodServiceImpl implements FoodService {
      * @return возврошает список блюд
      */
     @Override
-    public List<FoodEntity> searchFood(String keyword) {
+    public List<Food> searchFood(String keyword) {
         return foodRepository.searchFood(keyword);
     }
 
@@ -168,7 +171,7 @@ public class FoodServiceImpl implements FoodService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public FoodEntity findFoodById(Long id) throws Exception {
+    public Food findFoodById(Long id) throws Exception {
         return foodRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FoodEntity not found with id: " + id));
     }
@@ -181,8 +184,8 @@ public class FoodServiceImpl implements FoodService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public FoodEntity updateAvailabilityStatus(Long foodId) throws Exception {
-        FoodEntity food = findFoodById(foodId);
+    public Food updateAvailabilityStatus(Long foodId) throws Exception {
+        Food food = findFoodById(foodId);
         food.setAvailable(!food.isAvailable());
         return foodRepository.save(food);
     }
