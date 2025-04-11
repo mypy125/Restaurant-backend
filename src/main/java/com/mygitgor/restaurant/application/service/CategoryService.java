@@ -1,12 +1,13 @@
 package com.mygitgor.restaurant.application.service;
 
 import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
+import com.mygitgor.restaurant.model.domain.Category;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryEntity createCategory(String name, Long userId) throws Exception;
-    List<CategoryEntity> findCategoryByRestaurantId(Long id)throws Exception;
-    CategoryEntity findCategoryById(Long id)throws Exception;
+    Category createCategory(String name, Long userId) throws Exception;
+    List<Category> findCategoryByRestaurantId(Long id)throws Exception;
+    Category findCategoryById(Long id)throws Exception;
 }

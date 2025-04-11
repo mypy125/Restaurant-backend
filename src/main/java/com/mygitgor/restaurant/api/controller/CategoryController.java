@@ -1,9 +1,8 @@
 package com.mygitgor.restaurant.api.controller;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.application.service.CategoryService;
 import com.mygitgor.restaurant.application.service.UserService;
+import com.mygitgor.restaurant.model.domain.Category;
 import com.mygitgor.restaurant.model.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -26,22 +25,22 @@ public class CategoryController {
     @SneakyThrows
     @PostMapping("/admin/category")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<CategoryEntity> createCategory(@RequestBody CategoryEntity category,
+    public ResponseEntity<Category> createCategory(@RequestBody Category category,
                                                          @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
-        CategoryEntity createCategory = categoryService.createCategory(category.getName(), user.getId());
+        Category createCategory = categoryService.createCategory(category.getName(), user.getId());
 
         return new ResponseEntity<>(createCategory, HttpStatus.CREATED);
     }
 
     @SneakyThrows
     @GetMapping("/category/restaurant/{id}")
-    public ResponseEntity<List<CategoryEntity>> getRestaurantCategory(@PathVariable Long id,
+    public ResponseEntity<List<Category>> getRestaurantCategory(@PathVariable Long id,
                                                                       @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
 
-        List<CategoryEntity> getCategoryByRestaurantId = categoryService.findCategoryByRestaurantId(id);
+        List<Category> getCategoryByRestaurantId = categoryService.findCategoryByRestaurantId(id);
 
         return new ResponseEntity<>(getCategoryByRestaurantId, HttpStatus.CREATED);
     }

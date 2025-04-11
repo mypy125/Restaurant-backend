@@ -2,6 +2,7 @@ package com.mygitgor.restaurant.model.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -11,5 +12,5 @@ import java.util.List;
 public class IngredientCategory extends BaseModelId{
     private String name;
     private Long restaurantId;
-    private List<IngredientItem> ingredients;
+    private List<IngredientItem> ingredients = new ArrayList<>();
 }

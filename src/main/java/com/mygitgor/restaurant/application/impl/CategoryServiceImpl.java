@@ -1,7 +1,7 @@
 package com.mygitgor.restaurant.application.impl;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
+import com.mygitgor.restaurant.model.domain.Category;
+import com.mygitgor.restaurant.model.domain.Restaurant;
 import com.mygitgor.restaurant.model.repository.CategoryRepository;
 import com.mygitgor.restaurant.application.service.CategoryService;
 import com.mygitgor.restaurant.application.service.RestaurantService;
@@ -28,27 +28,27 @@ public class CategoryServiceImpl implements CategoryService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CategoryEntity createCategory(String name, Long userId) throws Exception {
-        RestaurantEntity restaurant = restaurantService.findRestaurantByUserId(userId);
+    public Category createCategory(String name, Long userId) throws Exception {
+        Restaurant restaurant = restaurantService.findRestaurantByUserId(userId);
 
-        CategoryEntity category = new CategoryEntity();
+        Category category = new Category();
         category.setName(name);
-        category.setRestaurant(restaurant);
+        category.setRestaurantId(restaurant.getId());
 
         return categoryRepository.save(category);
     }
 
     /**
      *  метод предназначен для поиска категорий, связанных с определенным рестораном по его идентификатору.
-     * @param id идентификатор пользователя
+     * @param restaurantId идентификатор пользователя
      * @return возврошает список котегори
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public List<CategoryEntity> findCategoryByRestaurantId(Long id) throws Exception {
+    public List<Category> findCategoryByRestaurantId(Long restaurantId) throws Exception {
 
-        RestaurantEntity restaurant = restaurantService.findRestaurantById(id);
-        return categoryRepository.findByRestaurantId(restaurant.getId());
+        restaurantService.findRestaurantById(restaurantId);
+        return categoryRepository.findByRestaurantId(restaurantId);
     }
 
     /**
@@ -58,11 +58,8 @@ public class CategoryServiceImpl implements CategoryService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public CategoryEntity findCategoryById(Long id) throws Exception {
-        Optional<CategoryEntity> category = categoryRepository.findById(id);
-        if(category.isEmpty()){
-            throw new Exception("category not found");
-        }
-        return category.get();
+    public Category findCategoryById(Long id) throws Exception {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new Exception("Category not found"));
     }
 }

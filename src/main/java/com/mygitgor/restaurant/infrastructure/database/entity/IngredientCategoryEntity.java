@@ -16,8 +16,10 @@ import java.util.List;
 @JsonIgnoreProperties({"ingredients"})
 public class IngredientCategoryEntity extends BaseEntity{
     private String name;
+
     @JsonIgnore
     @ManyToOne
+    @JoinColumn(name = "restaurant_id")
     private RestaurantEntity restaurant;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

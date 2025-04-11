@@ -2,16 +2,18 @@ package com.mygitgor.restaurant.application.service;
 
 import com.mygitgor.restaurant.infrastructure.database.entity.IngredientCategoryEntity;
 import com.mygitgor.restaurant.infrastructure.database.entity.IngredientItemEntity;
+import com.mygitgor.restaurant.model.domain.IngredientCategory;
+import com.mygitgor.restaurant.model.domain.IngredientItem;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface IngredientService {
-    IngredientCategoryEntity createIngredientCategory(String name, Long restaurantId)throws Exception;
-    IngredientCategoryEntity findIngredientCategoryById(Long id)throws Exception;
-    List<IngredientCategoryEntity> findIngredientCategoryByRestaurantId(Long id)throws Exception;
-    IngredientItemEntity createIngredientItem(Long restaurantId, String ingredientName, Long categoryId)throws Exception;
-    List<IngredientItemEntity> findRestaurantIngredients(Long restaurantId)throws Exception;
-    IngredientItemEntity updateStock(Long id)throws Exception;
+    IngredientCategory createIngredientCategory(String name, Long restaurantId)throws Exception;
+    IngredientCategory findIngredientCategoryById(Long id)throws Exception;
+    List<IngredientCategory> findIngredientCategoryByRestaurantId(Long id)throws Exception;
+    IngredientItem createIngredientItem(Long restaurantId, String ingredientName, Long categoryId)throws Exception;
+    List<IngredientItem> findRestaurantIngredients(Long restaurantId)throws Exception;
+    IngredientItem updateStock(Long id)throws Exception;
 }

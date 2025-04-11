@@ -1,8 +1,5 @@
 package com.mygitgor.restaurant.api.controller;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.UserEntity;
 import com.mygitgor.restaurant.api.controller.DTOs.request.CreateFoodRequest;
 import com.mygitgor.restaurant.api.controller.DTOs.response.MessageResponse;
 import com.mygitgor.restaurant.application.service.FoodService;
@@ -35,7 +32,7 @@ public class AdminFoodController {
                                                  @RequestHeader("Authorization") String jwt){
         User user = userService.findUserByJwtToken(jwt);
         Restaurant restaurant = restaurantService.findRestaurantByUserId(user.getId());
-        Food food = foodService.createFood(request, request.getCategory(), restaurant);
+        Food food = foodService.createFood(request);
 
         return new ResponseEntity<>(food, HttpStatus.CREATED);
     }

@@ -1,12 +1,12 @@
 package com.mygitgor.restaurant.application.impl;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.CategoryEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.FoodEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
 import com.mygitgor.restaurant.model.domain.Category;
 import com.mygitgor.restaurant.model.domain.Food;
+import com.mygitgor.restaurant.model.domain.IngredientItem;
 import com.mygitgor.restaurant.model.domain.Restaurant;
+import com.mygitgor.restaurant.model.repository.CategoryRepository;
 import com.mygitgor.restaurant.model.repository.FoodRepository;
+import com.mygitgor.restaurant.model.repository.IngredientItemRepository;
 import com.mygitgor.restaurant.model.repository.RestaurantRepository;
 import com.mygitgor.restaurant.api.controller.DTOs.request.CreateFoodRequest;
 import com.mygitgor.restaurant.application.service.FoodService;
@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -28,36 +30,44 @@ import java.util.stream.Collectors;
 public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
     private final RestaurantRepository restaurantRepository;
+    private final CategoryRepository categoryRepository;
+    private final IngredientItemRepository ingredientItemRepository;
 
     /**
      *  метод предназначен для создания нового блюда в ресторане.
      * @param request принемает запроос с необходимых параметров для создания еды
-     * @param category принемает конкретный категория
-     * @param restaurant принемает конкретный ресторан
      * @return возврошает блюду
      */
     @Transactional
     @Override
-    public Food createFood(CreateFoodRequest request, Category category, Restaurant restaurant) {
-        Food food = new Food();
-        food.setFoodCategory(category);
-        food.setRestaurant(restaurant);
-        food.setDescription(request.getDescription());
-        food.setName(request.getName());
-        food.setPrice(request.getPrice());
-        food.setIngredients(request.getIngredients());
-        food.setSeasonal(request.isSeasonal());
-        food.setVegetarian(request.isVegetarian());
-        food.setCreateondate(new Date());
-        if (request.getImages() != null && !request.getImages().isEmpty()) {
-            food.setImages(request.getImages());
+    public Food createFood(CreateFoodRequest request) {
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+
+        Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurant not found"));
+
+        List<IngredientItem> ingredients = ingredientItemRepository.findAllById(request.getIngredientIds());
+        if (ingredients.size() != request.getIngredientIds().size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Some ingredients not found");
         }
+        List<Long> ingredientIds = ingredients.stream()
+                .map(IngredientItem::getId)
+                .toList();
 
-        restaurant.getFoods().add(food);
-        foodRepository.save(food);
-        restaurantRepository.save(restaurant);
+        Food createFood = new Food();
+        createFood.setName(request.getName());
+        createFood.setDescription(request.getDescription());
+        createFood.setPrice(request.getPrice());
+        createFood.setCategoryId(category.getId());
+        createFood.setRestaurantId(restaurant.getId());
+        createFood.setIngredientIds(ingredientIds);
+        createFood.setSeasonal(request.isSeasonal());
+        createFood.setVegetarian(request.isVegetarian());
+        createFood.setCreatedOnDate(new Date());
+        createFood.setImages(request.getImages());
 
-        return food;
+        return foodRepository.save(createFood);
     }
 
 
@@ -69,8 +79,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public void deleteFood(Long foodId) throws Exception {
         Food food = findFoodById(foodId);
-        food.setRestaurant(null);
-        foodRepository.save(food);
+        foodRepository.delete(food);
     }
 
     /**
@@ -107,16 +116,23 @@ public class FoodServiceImpl implements FoodService {
     /**
      * метод предназначен для получения списка блюд из определенного котегори.
      * @param foods список блюд
-     * @param foodCategory нозвания категори
+     * @param categoryName нозвания категори
      * @return список блюд из котегори
      */
-    private List<Food> filterByCategory(List<Food> foods, String foodCategory) {
-        return foods.stream().filter(food -> {
-            if(food.getFoodCategory() != null){
-                return food.getFoodCategory().equals(foodCategory);
-            }
-            return false;
-        }).collect(Collectors.toList());
+    private List<Food> filterByCategory(List<Food> foods, String categoryName) {
+        if (categoryName == null || categoryName.isBlank()) {
+            return new ArrayList<>();
+        }
+
+        Optional<Category> category = categoryRepository.findByName(categoryName);
+        if (category.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Long categoryId = category.get().getId();
+        return foods.stream()
+                .filter(food -> categoryId.equals(food.getCategoryId()))
+                .collect(Collectors.toList());
     }
 
     /**

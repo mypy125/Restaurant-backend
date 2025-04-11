@@ -1,8 +1,8 @@
 package com.mygitgor.restaurant.application.impl;
 
-import com.mygitgor.restaurant.infrastructure.database.entity.IngredientCategoryEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.IngredientItemEntity;
-import com.mygitgor.restaurant.infrastructure.database.entity.RestaurantEntity;
+import com.mygitgor.restaurant.model.domain.IngredientCategory;
+import com.mygitgor.restaurant.model.domain.IngredientItem;
+import com.mygitgor.restaurant.model.domain.Restaurant;
 import com.mygitgor.restaurant.model.repository.IngredientCategoryRepository;
 import com.mygitgor.restaurant.model.repository.IngredientItemRepository;
 import com.mygitgor.restaurant.application.service.IngredientService;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * IngredientService: этот сервиз относятся к ингредиентам.
@@ -33,11 +32,11 @@ public class IngredientServiceImpl implements IngredientService {
      * @throws Exception  бросает исключения Exception
      */
     @Override
-    public IngredientCategoryEntity createIngredientCategory(String name, Long restaurantId) throws Exception {
-        RestaurantEntity restaurant = restaurantService.findRestaurantById(restaurantId);
+    public IngredientCategory createIngredientCategory(String name, Long restaurantId) throws Exception {
+        restaurantService.findRestaurantById(restaurantId);
 
-        IngredientCategoryEntity category = new IngredientCategoryEntity();
-        category.setRestaurant(restaurant);
+        IngredientCategory category = new IngredientCategory();
+        category.setRestaurantId(restaurantId);
         category.setName(name);
 
         return ingredientCategoryRepository.save(category);
@@ -50,25 +49,21 @@ public class IngredientServiceImpl implements IngredientService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public IngredientCategoryEntity findIngredientCategoryById(Long id) throws Exception {
-        Optional<IngredientCategoryEntity> ingredientCategory = ingredientCategoryRepository.findById(id);
-
-        if(ingredientCategory.isEmpty()){
-            throw new Exception("ingredient category not found");
-        }
-        return ingredientCategory.get();
+    public IngredientCategory findIngredientCategoryById(Long id) throws Exception {
+       return ingredientCategoryRepository.findById(id)
+               .orElseThrow(() -> new Exception("Ingredient category not found"));
     }
 
     /**
      * метод предназначен для поиска категорий ингредиентов по идентификатору ресторана.
-     * @param id идентификатор ресторана
+     * @param restaurantId идентификатор ресторана
      * @return возврошает список ингредиент категория
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public List<IngredientCategoryEntity> findIngredientCategoryByRestaurantId(Long id) throws Exception {
-//        restaurantService.findRestaurantById(id);
-        return ingredientCategoryRepository.findByRestaurantId(id);
+    public List<IngredientCategory> findIngredientCategoryByRestaurantId(Long restaurantId) throws Exception {
+        restaurantService.findRestaurantById(restaurantId);
+        return ingredientCategoryRepository.findByRestaurantId(restaurantId);
     }
 
     /**
@@ -80,19 +75,16 @@ public class IngredientServiceImpl implements IngredientService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public IngredientItemEntity createIngredientItem(Long restaurantId, String ingredientName, Long categoryId) throws Exception {
-        RestaurantEntity restaurant = restaurantService.findRestaurantById(restaurantId);
-        IngredientCategoryEntity category = findIngredientCategoryById(categoryId);
+    public IngredientItem createIngredientItem(Long restaurantId, String ingredientName, Long categoryId) throws Exception {
+        Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
+        IngredientCategory category = findIngredientCategoryById(categoryId);
 
-        IngredientItemEntity item = new IngredientItemEntity();
+        IngredientItem item = new IngredientItem();
         item.setName(ingredientName);
-        item.setRestaurant(restaurant);
-        item.setCategory(category);
+        item.setRestaurantId(restaurantId);
+        item.setCategoryId(categoryId);
 
-        IngredientItemEntity ingredient = ingredientItemRepository.save(item);
-        category.getIngredients().add(ingredient);
-
-        return ingredient;
+        return ingredientItemRepository.save(item);
     }
 
     /**
@@ -102,7 +94,8 @@ public class IngredientServiceImpl implements IngredientService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public List<IngredientItemEntity> findRestaurantIngredients(Long restaurantId) throws Exception {
+    public List<IngredientItem> findRestaurantIngredients(Long restaurantId) throws Exception {
+        restaurantService.findRestaurantById(restaurantId);
         return ingredientItemRepository.findByRestaurantId(restaurantId);
     }
 
@@ -113,15 +106,11 @@ public class IngredientServiceImpl implements IngredientService {
      * @throws Exception бросает исключения Exception
      */
     @Override
-    public IngredientItemEntity updateStock(Long id) throws Exception {
-       Optional<IngredientItemEntity> ingredientItem = ingredientItemRepository.findById(id);
+    public IngredientItem updateStock(Long id) throws Exception {
+        IngredientItem item = ingredientItemRepository.findById(id)
+                .orElseThrow(() -> new Exception("Ingredient not found"));
 
-       if(ingredientItem.isEmpty()){
-           throw new Exception("ingredient not found");
-       }
-
-       IngredientItemEntity item = ingredientItem.get();
-       item.setInStoke(!item.isInStoke());
+        item.setInStock(!item.isInStock());
        return ingredientItemRepository.save(item);
     }
 }
