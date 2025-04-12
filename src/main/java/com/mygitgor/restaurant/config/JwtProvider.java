@@ -20,7 +20,7 @@ import java.util.Set;
 @Service
 public class JwtProvider {
 
-    private SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+    private final SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
 
     /**
      * Метод создает JWT-токен на основе предоставленной аутентификации (Authentication).
@@ -33,13 +33,12 @@ public class JwtProvider {
     public String generateToken(Authentication aut){
         Collection<? extends GrantedAuthority> authorities = aut.getAuthorities();
         String roles = populateAuthorities(authorities);
-        String jwt = Jwts.builder().setIssuedAt(new Date())
+        return Jwts.builder().setIssuedAt(new Date())
                 .setExpiration((new Date(new Date().getTime()+86400000)))
                 .claim("email", aut.getName())
                 .claim("authorities", roles)
                 .signWith(key)
                 .compact();
-        return jwt;
     }
 
     /**
@@ -66,7 +65,6 @@ public class JwtProvider {
     public String getEmailFromJwtToken(String jwt){
         jwt = jwt.substring(7);
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-        String email = String.valueOf(claims.get("email"));
-        return email;
+        return String.valueOf(claims.get("email"));
     }
 }

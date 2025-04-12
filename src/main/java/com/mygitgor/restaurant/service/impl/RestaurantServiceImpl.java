@@ -4,6 +4,7 @@ import com.mygitgor.restaurant.domain.Address;
 import com.mygitgor.restaurant.domain.Restaurant;
 import com.mygitgor.restaurant.domain.User;
 import com.mygitgor.restaurant.dto.RestaurantDto;
+import com.mygitgor.restaurant.mapper.RestaurantMapper;
 import com.mygitgor.restaurant.repository.RestaurantRepository;
 import com.mygitgor.restaurant.repository.UserRepository;
 import com.mygitgor.restaurant.controller.DTOs.request.CreateRestaurantRequest;
@@ -25,6 +26,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
     private final AddressService addressService;
+    private final RestaurantMapper restaurantMapper;
 
 
     /**
@@ -42,16 +44,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Address address = addressService.saveUserAddress(request.getAddress(), user);
 
-        Restaurant restaurant = new Restaurant();
+        Restaurant restaurant = restaurantMapper.fromCreateRequest(request);
         restaurant.setAddress(address);
-        restaurant.setContactInformation(request.getContactInformation());
-        restaurant.setCuisineType(request.getCuisineType());
-        restaurant.setDescription(request.getDescription());
-        restaurant.setImages(request.getImages());
-        restaurant.setName(request.getName());
-        restaurant.setOpeningHours(request.getOpeningHours());
-        restaurant.setRegistrationTime(LocalDateTime.now());
         restaurant.setOwner(user);
+        restaurant.setRegistrationTime(LocalDateTime.now());
         return restaurantRepository.save(restaurant);
     }
 
@@ -152,12 +148,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public RestaurantDto addToFavorites(Long restaurantId, User user)throws Exception {
         Restaurant restaurant = findRestaurantById(restaurantId);
-
-        RestaurantDto restaurantDto = new RestaurantDto();
-        restaurantDto.setDescription(restaurant.getDescription());
-        restaurantDto.setImages(restaurant.getImages());
-        restaurantDto.setTitle(restaurant.getName());
-        restaurantDto.setId(restaurantId);
+        RestaurantDto restaurantDto = restaurantMapper.toDto(restaurant);
 
         if(user.getFavorites().contains(restaurantDto)){
             user.getFavorites().remove(restaurantDto);
@@ -165,7 +156,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         else user.getFavorites().add(restaurantDto);
 
         userRepository.save(user);
-
         return restaurantDto;
     }
 

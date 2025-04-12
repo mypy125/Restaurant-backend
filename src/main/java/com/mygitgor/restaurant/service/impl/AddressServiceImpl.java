@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
-
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
 
@@ -63,7 +62,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressDto createAddress(AddressDto addressDto, User user) throws AddressAlreadyExistsException {
         Optional<Address> existingAddress = addressRepository.findByStreetAddressAndUser(addressDto.getStreetAddress(), user);
-        if (existingAddress != null) {
+        if (existingAddress.isPresent()) {
             throw new AddressAlreadyExistsException("Address already exists for this user.");
         }
 

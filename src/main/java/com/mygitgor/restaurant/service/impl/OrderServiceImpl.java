@@ -2,6 +2,7 @@ package com.mygitgor.restaurant.service.impl;
 
 import com.mygitgor.restaurant.domain.*;
 import com.mygitgor.restaurant.dto.AddressDto;
+import com.mygitgor.restaurant.mapper.OrderMapper;
 import com.mygitgor.restaurant.repository.OrderItemRepository;
 import com.mygitgor.restaurant.repository.OrderRepository;
 import com.mygitgor.restaurant.repository.UserRepository;
@@ -31,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final RestaurantService restaurantService;
     private final CartService cartService;
+    private final OrderMapper orderMapper;
 
 
     /**
@@ -42,43 +44,27 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order createOrder(OrderRequest request, User user) throws Exception {
-        AddressDto shopAddress = request.getDeliveryAddress();
-        Address savedAddress = addressService.saveUserAddress(shopAddress, user);
-
+        Address savedAddress = addressService.saveUserAddress(request.getDeliveryAddress(), user);
         Restaurant restaurant = restaurantService.findRestaurantById(request.getRestaurantId());
-
-        Order createOrder = new Order();
-        createOrder.setCustomer(user);
-        createOrder.setCreateAt(new Date());
-        createOrder.setOrderStatus("PENDING");
-        createOrder.setDeliveryAddress(savedAddress);
-        createOrder.setRestaurant(restaurant);
-
         Cart cart = cartService.findCartByUserId(user.getId());
 
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        for(CartItem cartItem : cart.getItem()){
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setFood(cartItem.getFood());
-            orderItem.setIngredients(cartItem.getIngredients());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setTotalPrice(cartItem.getTotalPrice());
-
-            OrderItem saveOrder = orderItemRepository.save(orderItem);
-            orderItems.add(saveOrder);
-        }
+        List<OrderItem> orderItems = orderMapper.toOrderItems(cart.getItem());
+        orderItems.forEach(orderItemRepository::save);
 
         Long totalPrice = cartService.calculateCartTotals(cart);
 
-        createOrder.setItems(orderItems);
-        createOrder.setTotalPrice(totalPrice);
+        Order createOrder = orderMapper.toOrder(
+                user,
+                savedAddress,
+                restaurant,
+                orderItems,
+                totalPrice
+        );
 
         Order saveOrder = orderRepository.save(createOrder);
         restaurant.getOrders().add(saveOrder);
 
-        return createOrder;
+        return saveOrder;
 
     }
 
